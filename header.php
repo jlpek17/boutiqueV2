@@ -20,7 +20,8 @@
 </nav>
 
 <hero>
-  
+  <img src='./img/Hero.webp'>
+
 </hero>
 
 </header>
