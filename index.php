@@ -18,6 +18,7 @@ include("head.php");
         include("header.php");
         ?>
         <main>
+            <h1 class="text-center">Best Sellers</h1>
             <div class="row">
                 <?php
                     showArticles();

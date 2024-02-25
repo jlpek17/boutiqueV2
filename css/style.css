@@ -1,9 +1,30 @@
-.body {
-    background-color: black;
-    background-image: url('./img/leonard-de-vinci.jpg');
+* {
+
 }
 
 #wrapper {
     max-width: 1440px;
 }
+
+header {
+    background-image: url("../img/hero.webp");
+    background-position: center;
+    background-size: cover;
+    height: 70vh;
+    margin-bottom: 30px;
+
+}
+
+.navbar-brand {
+    font-size: 30px;
+}
+
+.navbar-nav {
+    font-size: 30px;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
 
