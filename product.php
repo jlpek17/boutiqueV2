@@ -11,6 +11,7 @@ include("head.php");
 ?>
 
 <body>
+<div class="container-fluid" id="wrapper">
   <?php
   include("header.php");
   $clicked_article_id = $_POST["id_article"];
@@ -29,7 +30,7 @@ include("head.php");
           <img src="<?=$article["img"];?>" class="card-img" alt="...">
           <h5 class="card-title">Special title treatment</h5>
           <p class="card-text"><?=$article["detail"];?></p>
-          <form method="POST" action="panier.php">
+          <form method="POST" action="cart.php">
             <input type="hidden" name="added_article_id" value="<?=$article["id"];?>">
             <button type="submit">Ajouter et voir mon panier</button>
           </form>
@@ -45,5 +46,6 @@ include("head.php");
   </main>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</div>
 </body>
 </html>

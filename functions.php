@@ -1,8 +1,7 @@
 <?php
 
-/* REFERENCE : les 3 montres proviennent du site Amazfit (T-REX ULTRA / BALANCE / ACTIVE */
-function getArticles()
-{
+/* This function create an array with all the reference articles (watch) */
+function getArticles() {
     return [
         [
             "id" => 1,
@@ -33,8 +32,8 @@ function getArticles()
     ];
 }
 
-function showArticles()
-{
+/* This function print all the articles on index.php page */
+function showArticles() {
     $articles = getArticles();
 
     foreach ($articles as $article) {
@@ -50,9 +49,9 @@ function showArticles()
                         <input type="hidden" name="id_article" value="<?= $article["id"] ?>">
                         <button type="submit">Voir le détail</button>
                     </form>
-                    <form method="POST" action="">
-                        <input type="hidden" name="id_article" value="<?= $article["id"] ?>">
-                        <button type="submit">Ajouter au Panier</button>
+                    <form method="POST" action="cart.php">
+                        <input type="hidden" name="added_article_id" value="<?= $article["id"] ?>">
+                        <button type="submit">Ajouter et voir mon Panier</button>
                     </form>
                     <a href="#" class="btn btn-primary">Ajouter au panier</a>
                 </div>
@@ -62,17 +61,21 @@ function showArticles()
     }
 }
 
-function createCart()
-{
+
+/* This function create the cart if it is not create */
+function createCart() {
     if (!isset($_SESSION["cart"])) {
         $_SESSION["cart"] = [];
     }
 }
 
+function emptyCart() {
+    unset($_SESSION["cart"]);
+}
 
 
-function addToCart($article)
-{
+/* This function add the articles when you click on "ajouter au panier" it on the index.php or product.php */
+function addToCart($article) {
 
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
 
@@ -91,14 +94,17 @@ function addToCart($article)
 
 
 
-function getArticleFromId($articleID)
-{
+function getArticleFromId($articleID) {
     $articles = getArticles();
     foreach ($articles as $article) {
         if ($article["id"] == $articleID) {
             return $article;
         }
     }
+}
+
+function showArticlesInCart() {
+
 }
 
 ?>
