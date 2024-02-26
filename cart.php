@@ -15,8 +15,10 @@ include("head.php");
   <?php
   include("header.php");
 
+  
   /* creation of cart if not already create */
   createCart();
+
 
   /* get article id of the article to add to cart */
   $articleToAddId = $_POST["added_article_id"];
@@ -26,8 +28,16 @@ include("head.php");
 
   /* */
   addToCart($article);
-  
-  var_dump($_SESSION["cart"]);
+
+  /*check cart Array*/
+  var_dump($_SESSION["cart"][0]["img"]);
+  echo "\n";
+
+  /* look for action for reset*/ 
+  if(array_key_exists('resetCart', $_POST)) { 
+    resetCart(); 
+  } 
+
 
   ?>
 
@@ -47,17 +57,40 @@ include("head.php");
           <th>supprimer article</th>
         </tr>
       </thead>
-  <tbody>
-    <tr>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <th scope="row" colspan="3">Total des achats</th>
-      <td></td>
-    </tr>
-  </tfoot>
+      <tbody>
+        <tr>
+        <?php
+        /* This function - showCartArticle()- print all articles in the cart */
+          $cartArticles = $_SESSION["cart"];
+          foreach ($cartArticles as $cartArticle) {
+        ?>
+          <td><img id="ico" src=<?=$cartArticle["img"];?>></td>
+          <td><?=$cartArticle["name"];?></td>
+          <td><?=$cartArticle["price"];?></td>
+          <td><?=$cartArticle["quantity"];?></td>
+          <td>TODO</td>
+          <td>TODO</td>
+        <?php
+        }
+        ?>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="3">Total des achats</th>
+          <td></td>
+        </tr>
+      </tfoot>
 </table>
+
+
+
+
+
+<form method="post"> 
+        <input type="submit" name="resetCart"
+                class="button" value="resetCart" /> 
+
 
 
 

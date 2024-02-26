@@ -51,9 +51,9 @@ function showArticles() {
                     </form>
                     <form method="POST" action="cart.php">
                         <input type="hidden" name="added_article_id" value="<?= $article["id"] ?>">
-                        <button type="submit">Ajouter et voir mon Panier</button>
+                        <button type="submit"><a class="btn btn-primary">Ajouter au panier</a></button>
                     </form>
-                    <a href="#" class="btn btn-primary">Ajouter au panier</a>
+                    
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@ function createCart() {
     }
 }
 
-function emptyCart() {
+function resetCart() {
     unset($_SESSION["cart"]);
 }
 
@@ -82,12 +82,12 @@ function addToCart($article) {
         if ($_SESSION["cart"][$i]["id"] == $article["id"]) {
 
             $_SESSION["cart"][$i]["quantity"] += 1;
-            echo "article dejà present ; quantité augnmentée";
+            echo "article dejà present ; quantité augmentée";
             return;
         }
     }
 
-    $article["quantity"] = 1;
+    $article["quantity"] += 1;
     array_push($_SESSION["cart"], $article);
     
 }

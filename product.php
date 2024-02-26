@@ -14,6 +14,13 @@ include("head.php");
 <div class="container-fluid" id="wrapper">
   <?php
   include("header.php");
+
+ /* look for action for reset*/ 
+ if(array_key_exists('added_article_id', $_POST)) { 
+  resetCart(); 
+} 
+
+
   $clicked_article_id = $_POST["id_article"];
   $article = getArticleFromId($clicked_article_id);
   ?>
@@ -35,9 +42,7 @@ include("head.php");
             <button type="submit">Ajouter et voir mon panier</button>
           </form>
         </div>
-        <div class="card-footer text-body-secondary">
-          2 days ago
-        </div>
+        <div class="card-footer text-body-secondary"></div>
       </div>
       </div>
 
