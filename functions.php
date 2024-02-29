@@ -4,7 +4,7 @@ function getArticles() {
     return [
         [
             "id" => 1,
-            "name" => "Extreme",
+            "name" => "Extreme Watch",
             "title" => "La montre connectée GPS idéale pour l'extérieur.",
             "detail" => "Devenez le chef de la meute chaque fois que vous bravez l'extérieur, que vos aventures vous mènent dans des forêts denses, vers des montagnes géantes ou dans les rues animées de la ville.",
             "price" => 429.90,
@@ -13,7 +13,7 @@ function getArticles() {
 
         [
             "id" => 2,
-            "name" => "Balance",
+            "name" => "Balance Watch",
             "title" => "Votre chemin vers l'equilibre commence ici.",
             "detail" => "Le succès d'aujourd'hui repose sur les bases que vous avez posées hier. Pour réaliser tout ce dont vous êtes capable, vous devez trouver le bon équilibre entre l'activité et la récupération.",
             "price" => 249.90,
@@ -22,7 +22,7 @@ function getArticles() {
 
         [
             "id" => 3,
-            "name" => "Mini",
+            "name" => "Mini Watch",
             "title" => "Restez actif, restez en bonne santé.",
             "detail" => "Notre Watch Mini est votre guide : elle vous permets de planifier vos séances d'entrainement d'etre à l'ecoute de votre récupération, de vous connecter à votre entourage - tout en réhaussant votre style sans effort.",
             "price" => 149.90,
@@ -153,6 +153,33 @@ function showArticleInCart() {
     }
 }
 ?>
+
+
+<?php
+/* This function print all articles in the cart */
+function showCartResume() {
+
+    foreach ($_SESSION["cart"] as $cartArticle) {
+  ?>
+    <div class="row">
+      <img id="icoResume" src=<?= $cartArticle["img"]; ?>>
+      <?= $cartArticle["name"]; ?>
+      <?= $cartArticle["price"] . " € "; ?>
+      <?= " x " . $cartArticle["quantity"];?>
+      <?= $cartArticle["price"] * $cartArticle["quantity"] . " €";?>
+    </div>
+   <?php
+    }
+}
+?>
+
+
+
+
+
+
+
+
 
 <?php
 /* This function calculate */

@@ -109,8 +109,8 @@ include("head.php");
             <div class="card" style="width: 18rem;">
               <div class="card-body">
                 <h5 class="card-title">Total Panier :</h5>
-                <p class="card-text"><?= number_format(grandTotal(), 2, ",", " ") . " €" ?></p>
-                <p class="card-text">dont TVA : 0 €</p>
+                <p class="card-text"><?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></p>
+                <p class="card-text"><?= "dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €";?></p>
                 <a href="#" class="btn btn-primary">Payer</a>
               </div>
             </div>
@@ -133,15 +133,18 @@ include("head.php");
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Validation du Panier</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+      <?= showCartResume(); ?>
+      <h5 class="card-title">Total Panier :</h5>
+                <p class="card-text"><?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></p>
+                <p class="card-text"><?= "dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €";?></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary">Valider mon panier</button>
       </div>
     </div>
   </div>
