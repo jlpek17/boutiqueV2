@@ -5,6 +5,7 @@ include("functions.php");
 
 <!DOCTYPE html>
 <html lang="fr">
+  
 
 <?php
 include("head.php");
