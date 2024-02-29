@@ -151,13 +151,22 @@ function showArticleInCart() {
         <?php
 
     }
-    /*
-    echo "<pre>";
-    print_r($cartArticles);
-    echo "</pre>";
-    */
 }
 ?>
+
+<?php
+/* This function calculate */
+function grandTotal() {
+
+        $total = 0;
+        for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
+        $total += $_SESSION["cart"][$i]["quantity"] * $_SESSION["cart"][$i]["price"];
+        }
+        return $total;                
+    }
+
+?>
+
 
 <?php
 /* Add one to the article in cart */

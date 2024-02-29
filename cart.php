@@ -24,6 +24,9 @@ include("head.php");
     /* creation of cart if not already create */
     createCart();
 
+/* ----- */
+/* This part increase quantity when users click from index.php or product.php*/
+
     if (isset($_POST["added_article_id"])) {
 
       /* get article id of the article to add to cart */
@@ -35,19 +38,22 @@ include("head.php");
       addToCart($article);
     }
 
-    /* look for action for reset cart */
+/* ----- */
+/* Action button */
+
+    /* ckeck for action for RESET cart */
     if (array_key_exists('resetCart', $_POST)) {
       resetCart();
     }
 
 
-    /* look for action for increase quantity */
+    /* check for action for INCREASE quantity */
     if (array_key_exists('plusOne', $_POST)) {
       plusOneInCart($_POST["plusOne"]);
     }
 
 
-    /* look for action for increase quantity */
+    /* check for action for DECREASE quantity */
     if (array_key_exists('minusOneId', $_POST)) {
 
       if ($_POST["minusOneQuantity"] >= 2) {
@@ -58,13 +64,13 @@ include("head.php");
       }
     }
 
-
-    /* look for action for delete article from cart */
+    /* check for action for DELETE article from cart */
     if (array_key_exists('deleteArticle', $_POST)) {
       deleteFromCart($_POST["deleteArticle"]);
     }
 
-
+    /* Calculate Grabnd Total */
+    grandTotal();
 
     ?>
 
@@ -103,7 +109,7 @@ include("head.php");
             <div class="card" style="width: 18rem;">
               <div class="card-body">
                 <h5 class="card-title">Total Panier :</h5>
-                <p class="card-text">0 €</p>
+                <p class="card-text"><?= number_format(grandTotal(), 2, ",", " ") . " €" ?></p>
                 <p class="card-text">dont TVA : 0 €</p>
                 <a href="#" class="btn btn-primary">Payer</a>
               </div>
@@ -113,15 +119,33 @@ include("head.php");
             <div class="card" style="width: 18rem;">
               <div class="card-body">
                 <form method="post"><input type="submit" name="resetCart" class="btn btn-primary" value="Vider Panier"></form>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Valider</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div>
+<!-- Modal -->
 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
