@@ -15,31 +15,54 @@ include("head.php");
     <?php
     include("header.php");
 
+    // echo "<pre>";
+    // print_r($_POST);
+    // echo "</pre>";
+
 
     /* creation of cart if not already create */
     createCart();
 
+    if (isset($_POST["added_article_id"])) {
 
-    /* get article id of the article to add to cart */
-    $articleToAddId = $_POST["added_article_id"];
+      /* get article id of the article to add to cart */
+      $articleToAddId = $_POST["added_article_id"];
 
-    /* get the article info link to the article id */
-    $article = getArticleFromId($articleToAddId);
+      /* get the article info link to the article id */
+      $article = getArticleFromId($articleToAddId);
 
-    /* */
-    if ($article != null) {
       addToCart($article);
-    } 
-
-    /*check data in cart Array
-  var_dump($_SESSION["cart"][0]["img"]);
-  echo "\n";*/
+    }
 
     /* look for action for reset cart */
     if (array_key_exists('resetCart', $_POST)) {
       resetCart();
     }
-    
+
+
+    /* look for action for increase quantity */
+    if (array_key_exists('plusOne', $_POST)) {
+      plusOneInCart($_POST["plusOne"]);
+    }
+
+
+    /* look for action for increase quantity */
+    if (array_key_exists('minusOneId', $_POST)) {
+
+      if ($_POST["minusOneQuantity"] >= 2) {
+        minusOneInCart($_POST["minusOneId"]);
+
+      } else {
+        echo "<script>alert('quantité minimum atteinte')</script>";
+      }
+    }
+
+
+    /* look for action for delete article from cart */
+    if (array_key_exists('deleteArticle', $_POST)) {
+      deleteFromCart($_POST["deleteArticle"]);
+    }
+
 
 
     ?>
@@ -66,10 +89,11 @@ include("head.php");
             </thead>
             <tbody>
               <?php
+
               showArticleInCart();
               ?>
-                </tr>
- 
+              </tr>
+
             </tbody>
           </table>
         </div>
@@ -94,9 +118,9 @@ include("head.php");
         </div>
       </div>
 
-<div>
- 
-</div>
+      <div>
+
+      </div>
 
 
 

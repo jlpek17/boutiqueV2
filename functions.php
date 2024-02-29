@@ -118,9 +118,8 @@ function getArticleFromId($articleID) {
 <?php
 /* This function print all articles in the cart */
 function showArticleInCart() {
-    $cartArticles = $_SESSION["cart"];
 
-    foreach ($cartArticles as $cartArticle) {
+    foreach ($_SESSION["cart"] as $cartArticle) {
   ?>
     <tr>
       <th><img id="ico" src=<?= $cartArticle["img"]; ?>></th>
@@ -128,44 +127,25 @@ function showArticleInCart() {
       <th><?= $cartArticle["price"] . " € "; ?></th>
       <th><?= " x " . $cartArticle["quantity"];?></th>
       <th>
-          <form method="post">
+          <form method="post" action="cart.php">
             <button type="submit" name="plusOne" value="<?= $cartArticle["id"]; ?>"><i class="bi bi-plus-circle-fill"></i></button> 
           </form>
       </th>
-      <?php
 
-      /* look for action for increase quantity */
-        if (array_key_exists('plusOne', $_POST)) { 
-            plusOneInCart($_POST["plusOne"]);
-          }
-      ?>
       <th>
-        <form method="post">
-           <button type="submit" name="minusOne" value="<?= $cartArticle["id"];?>"><i class="bi bi-dash-circle"></i></button> 
+        <form method="post" action="cart.php">
+            <input type="hidden" name="minusOneId" value="<?= $cartArticle["id"];?>">
+            <input type="hidden" name="minusOneQuantity" value="<?= $cartArticle["quantity"];?>"> 
+            <button type="submit"><i class="bi bi-dash-circle"></i></button> 
         </form>
       </th>
-      <?php
-      /* look for action for increase quantity */
-        if (array_key_exists('minusOne', $_POST)) {
-          if ($cartArticle["quantity"] >= 1) {
-            minusOneInCart($_POST["minusOne"]);
-          } else {
-            echo "quantité minimum atteinte";
-          }
-        }
-        ?>
         <th><?= $cartArticle["price"] * $cartArticle["quantity"] . " €";?></th>
         <th>
-            <form method="post">
-        <button type="submit" name="deleteArticle" value="<?= $cartArticle["id"]; ?>"><i class="bi bi-trash3-fill"></i></button> 
+            <form method="post" action="cart.php">
+            <input type="hidden" name="deleteArticle" value="<?= $cartArticle["id"]; ?>"> 
+        <button type="submit" ><i class="bi bi-trash3-fill"></i></button> 
           </form>    
         </th>
-        <?php
-              /* look for action for delete article from cart */
-              if (array_key_exists('deleteArticle', $_POST)) { 
-                deleteFromCart($_POST["deleteArticle"]);
-              }
-        ?>
 
         </tr>
         <?php
@@ -182,12 +162,11 @@ function showArticleInCart() {
 <?php
 /* Add one to the article in cart */
 function plusOneInCart($articleToIncrease) {
-    var_dump($articleToIncrease);
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
 
         if ($_SESSION["cart"][$i]["id"] == $articleToIncrease) {;
             $_SESSION["cart"][$i]["quantity"] += 1;
-            $_POST["plusOne"] = [];
+            //$_POST["plusOne"] = [];
             return;
         }
     }
@@ -199,10 +178,9 @@ function plusOneInCart($articleToIncrease) {
 function minusOneInCart($articleToDecrease) {
 
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
-    echo($articleToDecrease);
         if ($_SESSION["cart"][$i]["id"] == $articleToDecrease) {
             $_SESSION["cart"][$i]["quantity"] -= 1;
-            $_POST["minusOne"] = [];
+            //$_POST["minusOne"] = [];
             return;
         }
     }  
@@ -213,10 +191,9 @@ function minusOneInCart($articleToDecrease) {
 function deleteFromCart($articleToDelete) {
 
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
-        echo($articleToDelete);
+ 
             if ($_SESSION["cart"][$i]["id"] == $articleToDelete) {
-                unset($_SESSION["cart"][$i]);
-                $_POST["deleteOne"] = [];
+                array_splice($_SESSION["cart"],$i,1);
                 return;
             }
         }  
