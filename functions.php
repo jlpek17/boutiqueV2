@@ -236,3 +236,43 @@ function deleteFromCart($articleToDelete) {
 
 }
 ?>
+
+
+<?php
+/* This function print a modal if the cart is not empty */
+function confirmCartButton() {
+    if(grandTotal() > 0) {
+        ?>
+        <input type="hidden" name="expedition">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Valider ma Commande</button>
+        <?php
+    }
+}
+?>
+
+<?php
+/* This function calculate the total quantity of article */
+function quantityArticle() {
+
+        $quantityTotal = 0;
+        for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
+        $quantityTotal += $_SESSION["cart"][$i]["quantity"];
+        }
+        return $quantityTotal;                
+    }
+
+?>
+
+
+<?php
+
+function payExpedition() {
+    if($_POST["expedition"] == "Colissimo") {
+        $shippingCosts = "Frais d'expedition (7€ par montre) : " . quantityArticle() * 7 . "€";
+    } if($_POST["expedition"] == "Point Relais") {
+        $shippingCosts = "Frais d'expedition (3€ par montre) : " . quantityArticle() * 3 . "€";
+    } if($_POST["expedition"] == "Retrait Magasin") {
+        $shippingCosts = "Frais d'expedition Offert !";
+    } return $shippingCosts;
+}
+?>

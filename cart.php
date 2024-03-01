@@ -5,7 +5,7 @@ include("functions.php");
 
 <!DOCTYPE html>
 <html lang="fr">
-  
+
 
 <?php
 include("head.php");
@@ -24,8 +24,8 @@ include("head.php");
     /* creation of cart if not already create */
     createCart();
 
-/* ----- */
-/* This part increase quantity when users click from index.php or product.php*/
+    /* ----- */
+    /* This part increase quantity when users click from index.php or product.php*/
 
     if (isset($_POST["added_article_id"])) {
 
@@ -38,8 +38,8 @@ include("head.php");
       addToCart($article);
     }
 
-/* ----- */
-/* Action button */
+    /* ----- */
+    /* Action button */
 
     /* ckeck for action for RESET cart */
     if (array_key_exists('resetCart', $_POST)) {
@@ -58,7 +58,6 @@ include("head.php");
 
       if ($_POST["minusOneQuantity"] >= 2) {
         minusOneInCart($_POST["minusOneId"]);
-
       } else {
         echo "<script>alert('quantité minimum atteinte')</script>";
       }
@@ -103,53 +102,78 @@ include("head.php");
 
             </tbody>
           </table>
+          <form method="post"><input type="submit" name="resetCart" class="btn btn-primary" value="Vider mon Panier"></form>
         </div>
         <div class="col-md-4 justify-content-center">
           <div class="row">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h5 class="card-title">Total Panier :</h5>
-                <p class="card-text"><?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></p>
-                <p class="card-text"><?= "dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €";?></p>
-                <a href="#" class="btn btn-primary">Payer</a>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <form method="post"><input type="submit" name="resetCart" class="btn btn-primary" value="Vider Panier"></form>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Valider</button>
-              </div>
+            <div class="card" style="width: 28rem;">
+
+
+              <form method="POST" action="cart.php">
+                <legend>Mode d'expedition :</legend>
+
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" checked="checked">
+                  <label class="form-check-label" for="inlineRadio1">Colissimo</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais">
+                  <label class="form-check-label" for="inlineRadio2">Point Relais</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin">
+                  <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
+                </div>
+
+
+                <div class="card-body">
+                  <p class="card-title"><b>Total des achats : <?= number_format(grandTotal(), 2, ",", " ") . " €</b>" . "<i> (dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></i></p>
+
+                  <!-- Button trigger modal Validation (appear if the cart is not empty) -->
+                
+                  <?= confirmCartButton();?>
+                  <?= payExpedition() ?>
+
+                  
+
+                  <div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="cgv" id="flexRadioDefault1">
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        J'accepte les conditions générales de vente !
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
+      <!-- Modal -->
 
-<!-- Modal -->
+      <div class="modal fade" id="cartValidation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Validation du panier</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <?= showCartResume(); ?>
+              <h5 class="card-title">Total des achats : <?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></h5>
+              <p class="card-text"><?= $shippingCosts; ?></p>
+              <p class="card-text"><?= "Total à Regler :" . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €"; ?></p>
+            </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Validation du Panier</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <?= showCartResume(); ?>
-      <h5 class="card-title">Total Panier :</h5>
-                <p class="card-text"><?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></p>
-                <p class="card-text"><?= "dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €";?></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary">Valider mon panier</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+            <div>
+            </div>
+          </div>
+        </div>
+        <div>
+        </div>
 
 
 
