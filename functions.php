@@ -73,6 +73,18 @@ function createCart() {
 }
 ?>
 
+<?php
+/* This function reset the cart after success order */
+function resetOnSuccess() {
+    if (isset($_POST["resetAll"])) {
+        //echo isset($_POST["resetIfSuccess"]);
+        $_SESSION["cart"] = [];
+    }
+}
+?>
+
+
+
 
 <?php
 /*This function reset the cart */
@@ -250,7 +262,7 @@ function deleteFromCart($articleToDelete) {
 function confirmCartButton() {
     if(grandTotal() > 0 &&  $_POST["expedition"] != null) {
         ?>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Valider ma Commande</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Finaliser ma Commande</button>
         <?php
     }
 }

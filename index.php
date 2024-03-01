@@ -10,7 +10,10 @@ include("functions.php");
 
 <?php
 include("head.php");
+resetOnSuccess();
 ?>
+
+
 
 <body>
     <div class="container-fluid" id="wrapper">
