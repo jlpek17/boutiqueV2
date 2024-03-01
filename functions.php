@@ -186,13 +186,11 @@ function showCartResume() {
 
     foreach ($_SESSION["cart"] as $cartArticle) {
   ?>
-    <div class="row">
       <img id="icoResume" src=<?= $cartArticle["img"]; ?>>
       <?= $cartArticle["name"]; ?>
       <?= $cartArticle["price"] . " € "; ?>
-      <?= " x " . $cartArticle["quantity"];?>
+      <?= "( x" . $cartArticle["quantity"] . ") = ";?>
       <?= $cartArticle["price"] * $cartArticle["quantity"] . " €";?>
-    </div>
    <?php
     }
 }
@@ -311,12 +309,13 @@ function confirmExpeditionMethod() {
      if ($_POST["expedition"] != null) {
      ?>
     <form method="post">
-    <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="Changer">
+    <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="changer methode d'expedition">
      </form>
      <?php
      }
 }
 ?>
+
 
 
 

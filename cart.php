@@ -119,17 +119,17 @@ include("head.php");
                 <legend>Mode d'expedition :</legend>
 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" checked="checked">
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if($_POST["expedition"] == "Colissimo") {echo "checked";};?>>
                   <label class="form-check-label" for="inlineRadio1">Colissimo</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais">
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if($_POST["expedition"] == "Point Relais") {echo "checked";};?>>
                   <label class="form-check-label" for="inlineRadio2">Point Relais</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin">
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if($_POST["expedition"] == "Retrait Magasin") {echo "checked";};?>>
                   <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
                 </div>
                 <div>
@@ -163,19 +163,25 @@ include("head.php");
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <?= showCartResume(); ?>
-          <h5 class="card-title">Total des achats : <?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></h5>
-          <p class="card-text"><?= confirmExpeditionMethod(); ?></p>
-          <p class="card-text"><?= "Total à Regler :" . number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></p>
+          <div class="row d-flex align-items-center">
+            <?= showCartResume(); ?>
+          </div>
+          <div class="row justify-content-end">
+            <p class="card-text"><?= payExpedition(); ?></p>
+            <h5 class="card-text"><?= "Total à Regler : " . number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></h5>
+          </div>
         </div>
-        <div>
+
+        <div class="row">
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">
             Valider la commande !
           </button>
         </div>
+
       </div>
     </div>
+  </div>
   </div>
 
 
