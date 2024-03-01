@@ -46,6 +46,13 @@ include("head.php");
       resetCart();
     }
 
+    /* ckeck for action for RESET cart */
+    if (array_key_exists('expedition', $_POST)) {
+      resetExpeditionMethod();
+    }
+
+
+
 
     /* check for action for INCREASE quantity */
     if (array_key_exists('plusOne', $_POST)) {
@@ -102,7 +109,6 @@ include("head.php");
 
             </tbody>
           </table>
-          <form method="post"><input type="submit" name="resetCart" class="btn btn-primary" value="Vider mon Panier"></form>
         </div>
         <div class="col-md-4 justify-content-center">
           <div class="row">
@@ -126,6 +132,9 @@ include("head.php");
                   <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin">
                   <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
                 </div>
+                <div>
+                  <?= confirmExpeditionMethod(); ?>
+                </div>
 
 
                 <div class="card-body">
@@ -134,17 +143,9 @@ include("head.php");
                   <!-- Button trigger modal Validation (appear if the cart is not empty) -->
                 
                   <?= confirmCartButton();?>
-                  <?= payExpedition() ?>
+                  <?= confirmResetButton();?>
 
                   
-
-                  <div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="cgv" id="flexRadioDefault1">
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        J'accepte les conditions générales de vente !
-                      </label>
-                    </div>
                   </div>
                 </div>
               </form>
@@ -164,8 +165,8 @@ include("head.php");
             <div class="modal-body">
               <?= showCartResume(); ?>
               <h5 class="card-title">Total des achats : <?= number_format(grandTotal(), 2, ",", " ") . " €"; ?></h5>
-              <p class="card-text"><?= $shippingCosts; ?></p>
-              <p class="card-text"><?= "Total à Regler :" . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €"; ?></p>
+              <p class="card-text"><?= confirmExpeditionMethod();?></p>
+              <p class="card-text"><?= "Total à Regler :" . number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></p>
             </div>
 
             <div>

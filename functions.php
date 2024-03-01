@@ -73,12 +73,24 @@ function createCart() {
 }
 ?>
 
+
 <?php
 /*This function reset the cart */
 function resetCart() {
-    unset($_SESSION["cart"]);
+    //unset($_SESSION["cart"]);
+    $_SESSION["cart"] = [];
 }
 ?>
+
+<?php
+/*This function reset the expedition method */
+function resetExpeditionMethod() {
+    $_SESSION["expedition"] = [];
+}
+?>
+
+
+
 
 <?php
 /* This function add the articles when you click on "ajouter au panier" of index.php or product.php */
@@ -104,6 +116,7 @@ function addToCart($article) {
 
 
 <?php
+/*this function target the element information with the transmitted id */
 function getArticleFromId($articleID) {
     $articles = getArticles();
     foreach ($articles as $article) {
@@ -174,13 +187,6 @@ function showCartResume() {
 ?>
 
 
-
-
-
-
-
-
-
 <?php
 /* This function calculate */
 function grandTotal() {
@@ -224,6 +230,7 @@ function minusOneInCart($articleToDecrease) {
 ?>
 
 <?php
+/* This function delete an article from the cart whatever is quantity */
 function deleteFromCart($articleToDelete) {
 
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
@@ -239,19 +246,35 @@ function deleteFromCart($articleToDelete) {
 
 
 <?php
-/* This function print a modal if the cart is not empty */
+/* This function print the button for "validation" modal only if the cart is not empty */
 function confirmCartButton() {
-    if(grandTotal() > 0) {
+    if(grandTotal() > 0 &&  $_POST["expedition"] != null) {
         ?>
-        <input type="hidden" name="expedition">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Valider ma Commande</button>
         <?php
     }
 }
 ?>
 
+
 <?php
-/* This function calculate the total quantity of article */
+/* This function print the button for "reset Cart" modal only if the cart is not empty */
+function confirmResetButton() {
+    if(grandTotal() > 0) {
+        ?>
+           <form method="post">
+                <input type="submit" name="resetCart" class="btn btn-danger" value="Vider mon Panier">
+            </form>
+        <?php
+    }
+}
+?>
+
+
+
+
+<?php
+/* This function calculate the total quantity of article in cart */
 function quantityArticle() {
 
         $quantityTotal = 0;
@@ -263,16 +286,45 @@ function quantityArticle() {
 
 ?>
 
+<?php
+/* This function calculate the amount of shipping costs */
+function confirmExpeditionMethod() {
+    if ($_POST["expedition"] == null) {
+        ?>
+        <form method="post">
+        <button type="submit" class="btn btn-primary">Selectionner</button>
+         </form>
+     <?php
+     } payExpedition();
+     if ($_POST["expedition"] != null) {
+     ?>
+    <form method="post">
+    <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="Changer">
+     </form>
+     <?php
+     }
+}
+?>
+
+
+
+
+
 
 <?php
-
+/* This function calculate the amount of shipping costs */
 function payExpedition() {
     if($_POST["expedition"] == "Colissimo") {
-        $shippingCosts = "Frais d'expedition (7€ par montre) : " . quantityArticle() * 7 . "€";
+        $expeditionCost = quantityArticle() * 7;
+        $shippingCosts = "Frais d'expedition (7€ par montre) : " . $expeditionCost . "€";
     } if($_POST["expedition"] == "Point Relais") {
-        $shippingCosts = "Frais d'expedition (3€ par montre) : " . quantityArticle() * 3 . "€";
+        $expeditionCost = quantityArticle() * 3;
+        $shippingCosts = "Frais d'expedition (3€ par montre) : " . $expeditionCost . "€";
     } if($_POST["expedition"] == "Retrait Magasin") {
-        $shippingCosts = "Frais d'expedition Offert !";
-    } return $shippingCosts;
+        $expeditionCost = 0;
+        $shippingCosts = "Frais d'expedition Offert !";   
+    }
+    echo $shippingCosts;
+    $_SESSION["expeditionCost"] =  $expeditionCost;
 }
 ?>
