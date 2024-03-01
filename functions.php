@@ -114,11 +114,10 @@ function addToCart($article) {
         if ($_SESSION["cart"][$i]["id"] == $article["id"]) {
 
             $_SESSION["cart"][$i]["quantity"] += 1;
-            echo "article dejà present ; quantité augmentée";
             return;
         }
     }
-
+    $article["quantity"] = 0;
     $article["quantity"] += 1;
     array_push($_SESSION["cart"], $article);
     
@@ -336,7 +335,7 @@ function payExpedition() {
         $expeditionCost = 0;
         $shippingCosts = "Frais d'expedition Offert !";   
     } if (isset($_POST["expedition"])) {
-    $expeditionCost = $_SESSION["expeditionCost"];
+    $_SESSION["expeditionCost"] = $expeditionCost;
     echo $shippingCosts;
     }
 }
