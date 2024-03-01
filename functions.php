@@ -258,7 +258,7 @@ function deleteFromCart($articleToDelete) {
 <?php
 /* This function print the button for "validation" modal only if the cart is not empty */
 function confirmCartButton() {
-    if(grandTotal() > 0 &&  $_POST["expedition"] != null) {
+    if(grandTotal() > 0 && isset($_POST["expedition"])) {
         ?>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Finaliser ma Commande</button>
         <?php
@@ -298,15 +298,16 @@ function quantityArticle() {
 
 <?php
 /* This function calculate the amount of shipping costs */
-function confirmExpeditionMethod() {
-    if ($_POST["expedition"] == null) {
+function selectExpeditionMethod() {
+    //if ($_POST["expedition"] !== "Point Relais" && $_POST["expedition"] !== "Retrait Magasin" && $_POST["expedition"] !== "Colissimo") {
+    if ($_POST["expedition"] == null && $_SESSION["cart"] != null) {
         ?>
         <form method="post">
         <button type="submit" class="btn btn-primary">Selectionner</button>
          </form>
      <?php
-     } payExpedition();
-     if ($_POST["expedition"] != null) {
+     } if ($_POST["expedition"] != null) {
+        payExpedition();
      ?>
     <form method="post">
     <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="changer methode d'expedition">
@@ -334,8 +335,9 @@ function payExpedition() {
     } if($_POST["expedition"] == "Retrait Magasin") {
         $expeditionCost = 0;
         $shippingCosts = "Frais d'expedition Offert !";   
-    }
+    } if (isset($_POST["expedition"])) {
+    $expeditionCost = $_SESSION["expeditionCost"];
     echo $shippingCosts;
-    $_SESSION["expeditionCost"] =  $expeditionCost;
+    }
 }
 ?>

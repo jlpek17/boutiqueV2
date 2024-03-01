@@ -1,6 +1,13 @@
 <?php
 session_start();
 include("functions.php");
+
+/* initialise some variable */
+if (!isset($_POST["expedition"])) {
+  $_POST["expedition"] = [];
+}
+//$shippingCosts = []; 
+//$expeditionCost = []; 
 ?>
 
 <!DOCTYPE html>
@@ -133,7 +140,7 @@ include("head.php");
                   <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
                 </div>
                 <div>
-                  <?= confirmExpeditionMethod(); ?>
+                  <?= selectExpeditionMethod(); ?>
                 </div>
 
 
