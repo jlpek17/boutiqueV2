@@ -1,5 +1,9 @@
-<header>
+<?php
+createCart()
+?>
 
+<header>
+<!-- creation of the navbar (bootstrap) --> 
   <nav class="navbar navbar-expand-lg bg-*">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">World Watch</a>
@@ -12,7 +16,7 @@
             <a class="nav-link active" aria-current="page" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="cart.php">Panier</a>
+            <a class="nav-link" href="cart.php">Panier<?= "(" . quantityArticle() . ")"; ?></a>
           </li>
         </ul>
       </div>

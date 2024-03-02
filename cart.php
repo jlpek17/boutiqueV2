@@ -94,29 +94,11 @@ include("head.php");
 
       <div class="row">
         <div class="col-md-8">
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-                <th>Prix</th>
-                <th>Quantité</th>
-                <th></th>
-                <th></th>
-                <th>Total</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-
-              showArticleInCart();
-              ?>
-              </tr>
-
-            </tbody>
-          </table>
+          <?php
+          showArticleInCart();
+          ?>
         </div>
+
         <div class="col-md-4 justify-content-center">
           <div class="row">
             <div class="card" style="width: 28rem;">
@@ -126,17 +108,23 @@ include("head.php");
                 <legend>Mode d'expedition :</legend>
 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if($_POST["expedition"] == "Colissimo") {echo "checked";};?>>
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if ($_POST["expedition"] == "Colissimo") {
+                                                                                                                      echo "checked";
+                                                                                                                    }; ?>>
                   <label class="form-check-label" for="inlineRadio1">Colissimo</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if($_POST["expedition"] == "Point Relais") {echo "checked";};?>>
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if ($_POST["expedition"] == "Point Relais") {
+                                                                                                                        echo "checked";
+                                                                                                                      }; ?>>
                   <label class="form-check-label" for="inlineRadio2">Point Relais</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if($_POST["expedition"] == "Retrait Magasin") {echo "checked";};?>>
+                  <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if ($_POST["expedition"] == "Retrait Magasin") {
+                                                                                                                            echo "checked";
+                                                                                                                          }; ?>>
                   <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
                 </div>
                 <div>
@@ -149,8 +137,8 @@ include("head.php");
 
                   <!-- Button trigger modal Validation (appear if the cart is not empty) -->
 
-                  <?= confirmCartButton(); ?>
-                  <?= confirmResetButton(); ?>
+                  <?= finalizeButton(); ?>
+                  <?= ResetButton(); ?>
 
 
                 </div>
