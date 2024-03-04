@@ -54,7 +54,7 @@ include("head.php");
     }
 
     /* ckeck for action for RESET cart */
-    if (array_key_exists('expedition', $_POST)) {
+    if (array_key_exists('resetExpeditionMethod', $_POST)) {
       resetExpeditionMethod();
     }
 
@@ -89,72 +89,85 @@ include("head.php");
 
     <main>
 
-
-      <h1 class="text-center">Mon Panier</h1>
+      <?= emptyCartTitle() ?>
 
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6 d-flex justify-content-center flex-column">
           <?php
           showArticleInCart();
           ?>
+          <div class="row d-flex align-items-center">
+            <div class="col d-flex justify-content-center">
+              <?= ResetButton(); ?>
+            </div>
+          </div>
         </div>
+        <div class="col-md-6 d-flex justify-content-center">
 
-        <div class="col-md-4 justify-content-center">
-          <div class="row">
-            <div class="card" style="width: 28rem;">
+          <div class="card d-flex justify-content-center" style="width: 30rem; padding: 1rem;">
+            <form class="form-check" method="POST" action="cart.php">
+              <legend>Selectionner votre mode d'expedition :</legend>
 
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if ($_POST["expedition"] == "Colissimo") {
+                                                                                                                    echo "checked";
+                                                                                                                  }; ?>>
+                <label class="form-check-label" for="inlineRadio1">Colissimo</label>
+              </div>
 
-              <form method="POST" action="cart.php">
-                <legend>Mode d'expedition :</legend>
-
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if ($_POST["expedition"] == "Colissimo") {
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if ($_POST["expedition"] == "Point Relais") {
                                                                                                                       echo "checked";
                                                                                                                     }; ?>>
-                  <label class="form-check-label" for="inlineRadio1">Colissimo</label>
-                </div>
+                <label class="form-check-label" for="inlineRadio2">Point Relais</label>
+              </div>
 
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if ($_POST["expedition"] == "Point Relais") {
-                                                                                                                        echo "checked";
-                                                                                                                      }; ?>>
-                  <label class="form-check-label" for="inlineRadio2">Point Relais</label>
-                </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if ($_POST["expedition"] == "Retrait Magasin") {
+                                                                                                                          echo "checked";
+                                                                                                                        }; ?>>
+                <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
+              </div>
 
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if ($_POST["expedition"] == "Retrait Magasin") {
-                                                                                                                            echo "checked";
-                                                                                                                          }; ?>>
-                  <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
-                </div>
-                <div>
-                  <?= selectExpeditionMethod(); ?>
-                </div>
+              <div class="col d-flex justify-content-center">
+                <?= selectExpeditionMethod(); ?>
+              </div>
+            
+              </form>
 
 
-                <div class="card-body">
-                  <p class="card-title"><b>Total des achats : <?= number_format(grandTotal(), 2, ",", " ") . " €</b>" . "<i> (dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></i></p>
+            <p class="card-title">
+              <b>Sous-total : <?= number_format(grandTotal(), 2, ",", " ") . " €</b>" . "<i> (dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></i>
+            </p>
+            <p class="card-title"> Frais d'expédition <?= showExpeditionMethod(); ?>: Calculé à l'etape suivante </p>
 
-                  <!-- Button trigger modal Validation (appear if the cart is not empty) -->
+            <!-- Button trigger modal Validation (appear if the cart is not empty) -->
 
-                  <?= finalizeButton(); ?>
-                  <?= ResetButton(); ?>
-
-
-                </div>
+            <div class="col d-flex justify-content-center">
+            <?= finalizeButton(); ?>
             </div>
-            </form>
-          </div>
         </div>
       </div>
   </div>
+  </div>
+  </div>
+  </div>
+
+
+
+
+
+
+
+
+
   <!-- Modal Confirmation -->
 
   <div class="modal fade" id="cartValidation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Validation du panier</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Recapitulatif</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -162,7 +175,7 @@ include("head.php");
             <?= showCartResume(); ?>
           </div>
           <div class="row justify-content-end">
-            <p class="card-text"><?= payExpedition(); ?></p>
+            <p class="card-text"><?= $_SESSION["shippingCosts"]; ?></p>
             <h5 class="card-text"><?= "Total à Regler : " . number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></h5>
           </div>
         </div>

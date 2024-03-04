@@ -39,7 +39,7 @@ include("head.php");
           <p class="card-text"><?=$article["detail"];?></p>
           <form method="POST" action="cart.php">
             <input type="hidden" name="added_article_id" value="<?=$article["id"];?>">
-            <button type="submit">Ajouter et voir mon panier</button>
+            <button class="btn btn-primary" type="submit">Ajouter et voir mon panier</button>
           </form>
         </div>
         <div class="card-footer text-body-secondary"></div>
