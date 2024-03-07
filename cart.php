@@ -2,12 +2,85 @@
 session_start();
 include("functions.php");
 
-/* initialise some variable */
+/* LOGIC */
+
+  /* initialise some variable */
+
 if (!isset($_POST["expedition"])) {
   $_POST["expedition"] = [];
 }
-//$shippingCosts = []; 
-//$expeditionCost = []; 
+
+  /* creation of cart if it is not already create */
+  createCart();
+
+  /* This part increase quantity when users click from index.php or product.php*/
+
+  if (isset($_POST["added_article_id"])) {
+
+    /* get article id of the article to add to cart */
+    $articleToAddId = $_POST["added_article_id"];
+
+    /* get the article info link to the article id */
+    $article = getArticleFromId($articleToAddId);
+
+    addToCart($article);
+  }
+
+  /* ckeck for action for RESET cart */
+  if (array_key_exists('resetCart', $_POST)) {
+    resetCart();
+  }
+
+  /* ckeck for action for RESET cart */
+  if (array_key_exists('resetExpeditionMethod', $_POST)) {
+    resetExpeditionMethod();
+  }
+
+  /* check for action for INCREASE quantity */
+  if (array_key_exists('plusOne', $_POST)) {
+    plusOneInCart($_POST["plusOne"]);
+  }
+
+
+  /* check for action for DECREASE quantity */
+  if (array_key_exists('minusOneId', $_POST)) {
+
+    if ($_POST["minusOneQuantity"] >= 2) {
+      minusOneInCart($_POST["minusOneId"]);
+    } else {
+      echo "<script>alert('quantité minimum atteinte')</script>";
+    }
+  }
+
+  /* check for action for DELETE article from cart */
+  if (array_key_exists('deleteArticle', $_POST)) {
+    deleteFromCart($_POST["deleteArticle"]);
+  }
+
+  /* Calculate Grand Total */
+  grandTotal();
+
+  /* How to check stored data */
+   
+  // echo "<pre>";
+    // print_r($_POST);
+    // echo "</pre>";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -20,76 +93,15 @@ include("head.php");
 
 <body>
   <div class="container-fluid" id="wrapper">
+    
     <?php
-    include("header.php");
-
-    // echo "<pre>";
-    // print_r($_POST);
-    // echo "</pre>";
-
-
-    /* creation of cart if not already create */
-    createCart();
-
-    /* ----- */
-    /* This part increase quantity when users click from index.php or product.php*/
-
-    if (isset($_POST["added_article_id"])) {
-
-      /* get article id of the article to add to cart */
-      $articleToAddId = $_POST["added_article_id"];
-
-      /* get the article info link to the article id */
-      $article = getArticleFromId($articleToAddId);
-
-      addToCart($article);
-    }
-
-    /* ----- */
-    /* Action button */
-
-    /* ckeck for action for RESET cart */
-    if (array_key_exists('resetCart', $_POST)) {
-      resetCart();
-    }
-
-    /* ckeck for action for RESET cart */
-    if (array_key_exists('resetExpeditionMethod', $_POST)) {
-      resetExpeditionMethod();
-    }
-
-
-
-
-    /* check for action for INCREASE quantity */
-    if (array_key_exists('plusOne', $_POST)) {
-      plusOneInCart($_POST["plusOne"]);
-    }
-
-
-    /* check for action for DECREASE quantity */
-    if (array_key_exists('minusOneId', $_POST)) {
-
-      if ($_POST["minusOneQuantity"] >= 2) {
-        minusOneInCart($_POST["minusOneId"]);
-      } else {
-        echo "<script>alert('quantité minimum atteinte')</script>";
-      }
-    }
-
-    /* check for action for DELETE article from cart */
-    if (array_key_exists('deleteArticle', $_POST)) {
-      deleteFromCart($_POST["deleteArticle"]);
-    }
-
-    /* Calculate Grabnd Total */
-    grandTotal();
-
+    include("header.php");  
     ?>
 
     <main>
 
-      <?= emptyCartTitle() ?>
+    <?= emptyCartTitle() ?>
+
 
       <div class="row">
         <div class="col-md-6 d-flex justify-content-center flex-column">
