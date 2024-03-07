@@ -31,11 +31,12 @@ include("head.php");
 
       <div class="card text-center" style="width: 36rem;">
         <div class="card-header">
-          Featured
+          En détail
         </div>
         <div class="card-body">
           <img src="<?=$article["img"];?>" class="card-img" alt="...">
-          <h5 class="card-title">Special title treatment</h5>
+          <h5 class="card-title"><?=$article["name"];?></h5>
+          <p class="card-text"><b><?=$article["title"];?></b></p>
           <p class="card-text"><?=$article["detail"];?></p>
           <form method="POST" action="cart.php">
             <input type="hidden" name="added_article_id" value="<?=$article["id"];?>">
