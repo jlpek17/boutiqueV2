@@ -61,23 +61,10 @@ if (!isset($_POST["expedition"])) {
   grandTotal();
 
   /* How to check stored data */
-   
+
   // echo "<pre>";
     // print_r($_POST);
     // echo "</pre>";
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

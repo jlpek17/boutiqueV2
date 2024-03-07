@@ -373,8 +373,12 @@ function emptyCartTitle() {
 
 <?php
 /* This function calculate the amount of shipping costs */
-function payExpedition()
-{
+function payExpedition() {
+
+$expeditionCost = [];
+$shippingCosts = [];
+
+
     switch ($_POST["expedition"]) {
 
         case "Colissimo": 
