@@ -1,57 +1,63 @@
 <?php
-/* This function create an array with all the reference articles (watch) */
-function getArticles()
+
+function getConnection()
 {
-    return [
-        [
-            "id" => 1,
-            "name" => "Extreme Watch",
-            "title" => "La montre connectée GPS idéale pour l'extérieur.",
-            "detail" => "Devenez le chef de la meute chaque fois que vous bravez l'extérieur, que vos aventures vous mènent dans des forêts denses, vers des montagnes géantes ou dans les rues animées de la ville.",
-            "price" => 429.90,
-            "img" => "./img/tRexUltra.webp"
-        ],
+    // try : je tente une connexion
+    try {
+        $db = new PDO(
+            'mysql:host=localhost;dbname=boutique_en_ligne;charset=utf8', // infos : sgbd, nom base, adresse (host) + encodage
+            'phpmyadmin', // pseudo utilisateur (root en local)
+            'jlpek17', // mot de passe (aucun en local)
+            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC)
+        ); // options PDO : 1) affichage des erreurs / 2) récupération des données simplifiée
 
-        [
-            "id" => 2,
-            "name" => "Balance Watch",
-            "title" => "Votre chemin vers l'equilibre commence ici.",
-            "detail" => "Le succès d'aujourd'hui repose sur les bases que vous avez posées hier. Pour réaliser tout ce dont vous êtes capable, vous devez trouver le bon équilibre entre l'activité et la récupération.",
-            "price" => 249.90,
-            "img" => "./img/balance.webp"
-        ],
+        // si ça ne marche pas : je mets fin au code php en affichant l'erreur
+    } catch (Exception $erreur) { // je récupère l'erreur en paramètre
+        die('Erreur : ' . $erreur->getMessage());  // je l'affiche et je mets fin au script
+    }
 
-        [
-            "id" => 3,
-            "name" => "Mini Watch",
-            "title" => "Restez actif, restez en bonne santé.",
-            "detail" => "Notre Watch Mini est votre guide : elle vous permets de planifier vos séances d'entrainement d'etre à l'ecoute de votre récupération et de vous connecter à votre entourage.",
-            "price" => 149.90,
-            "img" => "./img/active.webp"
-        ]
-    ];
+    // je retourne la connexion stockée dans une variable
+    return $db;
 }
 
-?>
+// ****************** récupérer la liste des articles **********************
 
-<?php
+function getArticles()
+{
+    // je me connecte à la base de données
+    $db = getConnection();
+
+    // j'exécute une requête qui va récupérer tous les articles
+    $results = $db->query('SELECT * FROM articles');
+
+    // je récupère les résultats et je les renvoie grâce à return
+    var_dump($results);
+    return $results->fetchAll();
+}
+
+
+
+
+
+
+
 /* This function print all the articles on index.php page */
 function showArticles()
 {
-    $articles = getArticles();
+    $results = getArticles();
 
-    foreach ($articles as $article) {
+    foreach ($results as $result) {
 ?>
         <div class="col-md-4 d-flex justify-content-center">
             <div class="card" style="width: 20rem; height: 40rem;">
-                <img src=<?= $article["img"]; ?> class="card-img-top" alt="...">
+                <img src=<?= $result["image"]; ?> class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title"><?= $article["name"]; ?></h5>
-                    <p class="card-text"><?= $article["detail"] . "\n"; ?></p>
-                    <p class="card-text"><b><?= $article["price"] . " €"; ?></b></p>
+                    <h5 class="card-title"><?= $result["nom"]; ?></h5>
+                    <p class="card-text"><?= $result["description"] . "\n"; ?></p>
+                    <p class="card-text"><b><?= $result["prix"] . " €"; ?></b></p>
                     <div class="d-flex flex-row justify-content-around">
                         <form method="POST" action="product.php">
-                            <input type="hidden" name="id_article" value="<?= $article["id"] ?>">
+                            <input type="hidden" name="id_article" value="<?= $result["id"] ?>">
                             <button type="submit" class="btn btn-light"><i id="glassIco" class="fa-solid fa-magnifying-glass-plus"></i></button>
                         </form>
                         <form method="POST" action="cart.php">
