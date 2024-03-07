@@ -4,67 +4,67 @@ include("functions.php");
 
 /* LOGIC */
 
-  /* initialise some variable */
+/* initialise some variable */
 
 if (!isset($_POST["expedition"])) {
   $_POST["expedition"] = [];
 }
 
-  /* creation of cart if it is not already create */
-  createCart();
+/* creation of cart if it is not already create */
+createCart();
 
-  /* This part increase quantity when users click from index.php or product.php*/
+/* This part increase quantity when users click from index.php or product.php*/
 
-  if (isset($_POST["added_article_id"])) {
+if (isset($_POST["added_article_id"])) {
 
-    /* get article id of the article to add to cart */
-    $articleToAddId = $_POST["added_article_id"];
+  /* get article id of the article to add to cart */
+  $articleToAddId = $_POST["added_article_id"];
 
-    /* get the article info link to the article id */
-    $article = getArticleFromId($articleToAddId);
+  /* get the article info link to the article id */
+  $article = getArticleFromId($articleToAddId);
 
-    addToCart($article);
+  addToCart($article);
+}
+
+/* ckeck for action for RESET cart */
+if (array_key_exists('resetCart', $_POST)) {
+  resetCart();
+}
+
+/* ckeck for action for RESET cart */
+if (array_key_exists('resetExpeditionMethod', $_POST)) {
+  resetExpeditionMethod();
+}
+
+/* check for action for INCREASE quantity */
+if (array_key_exists('plusOne', $_POST)) {
+  plusOneInCart($_POST["plusOne"]);
+}
+
+
+/* check for action for DECREASE quantity */
+if (array_key_exists('minusOneId', $_POST)) {
+
+  if ($_POST["minusOneQuantity"] >= 2) {
+    minusOneInCart($_POST["minusOneId"]);
+  } else {
+    echo "<script>alert('quantité minimum atteinte')</script>";
   }
+}
 
-  /* ckeck for action for RESET cart */
-  if (array_key_exists('resetCart', $_POST)) {
-    resetCart();
-  }
+/* check for action for DELETE article from cart */
+if (array_key_exists('deleteArticle', $_POST)) {
+  deleteFromCart($_POST["deleteArticle"]);
+}
 
-  /* ckeck for action for RESET cart */
-  if (array_key_exists('resetExpeditionMethod', $_POST)) {
-    resetExpeditionMethod();
-  }
+/* Calculate Grand Total */
+grandTotal();
 
-  /* check for action for INCREASE quantity */
-  if (array_key_exists('plusOne', $_POST)) {
-    plusOneInCart($_POST["plusOne"]);
-  }
+/* How to check stored data */
 
-
-  /* check for action for DECREASE quantity */
-  if (array_key_exists('minusOneId', $_POST)) {
-
-    if ($_POST["minusOneQuantity"] >= 2) {
-      minusOneInCart($_POST["minusOneId"]);
-    } else {
-      echo "<script>alert('quantité minimum atteinte')</script>";
-    }
-  }
-
-  /* check for action for DELETE article from cart */
-  if (array_key_exists('deleteArticle', $_POST)) {
-    deleteFromCart($_POST["deleteArticle"]);
-  }
-
-  /* Calculate Grand Total */
-  grandTotal();
-
-  /* How to check stored data */
-
-  // echo "<pre>";
-    // print_r($_POST);
-    // echo "</pre>";
+// echo "<pre>";
+// print_r($_POST);
+// echo "</pre>";
 
 
 
@@ -80,14 +80,14 @@ include("head.php");
 
 <body>
   <div class="container-fluid" id="wrapper">
-    
+
     <?php
-    include("header.php");  
+    include("header.php");
     ?>
 
     <main>
 
-    <?= emptyCartTitle() ?>
+      <?= emptyCartTitle() ?>
 
 
       <div class="row">
@@ -131,8 +131,8 @@ include("head.php");
               <div class="col d-flex justify-content-center">
                 <?= selectExpeditionMethod(); ?>
               </div>
-            
-              </form>
+
+            </form>
 
 
             <p class="card-title">
@@ -143,21 +143,12 @@ include("head.php");
             <!-- Button trigger modal Validation (appear if the cart is not empty) -->
 
             <div class="col d-flex justify-content-center">
-            <?= finalizeButton(); ?>
+              <?= finalizeButton(); ?>
             </div>
+          </div>
         </div>
       </div>
   </div>
-  </div>
-  </div>
-  </div>
-
-
-
-
-
-
-
 
 
   <!-- Modal Confirmation -->
@@ -185,10 +176,8 @@ include("head.php");
             Valider la commande !
           </button>
         </div>
-
       </div>
     </div>
-  </div>
   </div>
 
 
@@ -225,8 +214,7 @@ include("head.php");
 
 
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <?php include("footer.php"); ?>
   </div>
 </body>
 
