@@ -89,8 +89,9 @@ include("head.php");
 
       <?= emptyCartTitle() ?>
 
-
       <div class="row">
+
+        <!-- coté gauche (articles) du panier -->
         <div class="col-md-6 d-flex justify-content-center flex-column">
           <?php
           showArticleInCart();
@@ -101,6 +102,9 @@ include("head.php");
             </div>
           </div>
         </div>
+
+
+        <!-- coté droit (client) du panier -->
         <div class="col-md-6 d-flex justify-content-center">
 
           <div class="card d-flex justify-content-center" style="width: 30rem; padding: 1rem;">
@@ -145,77 +149,72 @@ include("head.php");
             <div class="col d-flex justify-content-center">
               <?= finalizeButton(); ?>
             </div>
+
           </div>
         </div>
       </div>
-  </div>
 
 
-  <!-- Modal Confirmation -->
+      <!-- Modal Confirmation -->
 
-  <div class="modal fade" id="cartValidation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Recapitulatif</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row d-flex align-items-center">
-            <?= showCartResume(); ?>
+      <div class="modal fade" id="cartValidation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Recapitulatif</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row d-flex align-items-center">
+                <?= showCartResume(); ?>
+              </div>
+              <div class="row justify-content-end">
+                <p class="card-text"><?= $_SESSION["shippingCosts"]; ?></p>
+                <h5 class="card-text"><?= "Total à Regler : " . number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></h5>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">
+                Valider la commande !
+              </button>
+            </div>
           </div>
-          <div class="row justify-content-end">
-            <p class="card-text"><?= $_SESSION["shippingCosts"]; ?></p>
-            <h5 class="card-text"><?= "Total à Regler : " . number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></h5>
-          </div>
-        </div>
-
-        <div class="row">
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">
-            Valider la commande !
-          </button>
         </div>
       </div>
-    </div>
-  </div>
 
 
 
 
-  <!-- Modal Success -->
-  <div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Commande passé avec succes !</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Felicitation ! Nous avons bien recu votre commande d'un montant de <?= number_format(grandTotal(), 2, ",", " ") . " €"; ?>.
-          Nous vous remercion de votre confiance.
-        </div>
-        <div class="modal-footer">
-          <form method="post" action="index.php">
-            <button type="submit" name="resetAll" class="btn btn-primary">retour à l'acceuil</button>
-          </form>
+      <!-- Modal Success -->
+      <div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Commande passé avec succes !</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= number_format(grandTotal(), 2, ",", " ") . " €"; ?>.
+              Nous vous remercion de votre confiance.
+            </div>
+            <div class="modal-footer">
+              <form method="post" action="index.php">
+                <button type="submit" name="resetAll" class="btn btn-primary">retour à l'acceuil</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+
+
+
+    </main>
   </div>
+    <?php include("footer.php"); ?>
 
-
-
-
-
-
-
-
-
-
-  </main>
-  <?php include("footer.php"); ?>
-  </div>
 </body>
 
 </html>

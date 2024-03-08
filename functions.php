@@ -1,5 +1,9 @@
 <?php
 
+/* ***** GENERAL LOGIC ***** */
+
+/* ***** Connexion a la BDD ***** */
+
 function getConnection()
 {
     // try : je tente une connexion
@@ -20,7 +24,8 @@ function getConnection()
     return $db;
 }
 
-// ****************** récupérer la liste des articles **********************
+
+/* ***** récupérer la liste des articles  dans la base de donnée ***** */
 
 function getArticles()
 {
@@ -31,29 +36,86 @@ function getArticles()
     $results = $db->query('SELECT * FROM articles');
 
     // je récupère les résultats et je les renvoie grâce à return
-    var_dump($results);
     return $results->fetchAll();
 }
 
 
-
-
-
-
-
-/* This function print all the articles on index.php page */
-function showArticles()
+function getGammes()
 {
-    $results = getArticles();
+    // je me connecte à la base de données
+    $db = getConnection();
 
-    foreach ($results as $result) {
+    // j'exécute une requête qui va récupérer tous les articles
+    $results = $db->query('SELECT * FROM id_gamme');
+
+    // je récupère les résultats et je les renvoie grâce à return
+    return $results->fetchAll();
+}
+
+
+function getArticlesbyGammes()
+{
+    // je me connecte à la base de données
+    $db = getConnection();
+
+    // j'exécute une requête qui va récupérer tous les articles
+    $results = $db->query('SELECT * FROM articles WHERE id_gamme="1"');
+
+    // je récupère les résultats et je les renvoie grâce à return
+    return $results->fetchAll();
+}
+
+
+/* **************** filtrer les articles à afficher *************/
+
+function filterArticles(){
+
+    // je récupère tous les articles
+    $allArticles = getArticles();
+
+    // je stocke dans le session le choix de gamme si effectué précédemment
+    if (isset($_POST["gamme"])){
+        $_SESSION["gamme"] = $_POST["gamme"];
+    }
+
+    // si pas de choix ou toutes les gammes => on renvoie tous les articles
+    if($_SESSION["gamme"] == "all" || !isset($_SESSION["gamme"])){
+        return $allArticles;
+
+    // si choix de gamme effectué : on renvoie uniquement les articles correspondants
+    } else {
+        $gammeId = $_SESSION["gamme"];
+
+        $articlesToDisplay = [];
+
+        // on ne garde que ceux rattachés à la gamme
+        foreach ($allArticles as $article) {
+
+            if($article['id_gamme'] == $gammeId){
+                array_push($articlesToDisplay, $article);
+            }
+        }
+
+        return $articlesToDisplay;
+    }
+
+}
+
+
+
+/* ***** This function print ALL the get articles on index.php page ***** */
+function showArticles($articles)
+{
+
+    foreach ($articles as $result) {
 ?>
         <div class="col-md-4 d-flex justify-content-center">
-            <div class="card" style="width: 20rem; height: 40rem;">
+            <div class="card" style="width: 20rem; height: 42rem;">
                 <img src=<?= $result["image"]; ?> class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title"><?= $result["nom"]; ?></h5>
-                    <p class="card-text"><?= $result["description"] . "\n"; ?></p>
+                    <p class="card-text"><b><?= $result["description"] . "\n"; ?></b></p>
+                    <p class="card-text"><?= $result["description_detaillee"] . "\n"; ?></p>
                     <p class="card-text"><b><?= $result["prix"] . " €"; ?></b></p>
                     <div class="d-flex flex-row justify-content-around">
                         <form method="POST" action="product.php">
@@ -61,7 +123,7 @@ function showArticles()
                             <button type="submit" class="btn btn-light"><i id="glassIco" class="fa-solid fa-magnifying-glass-plus"></i></button>
                         </form>
                         <form method="POST" action="cart.php">
-                            <input type="hidden" name="added_article_id" value="<?= $article["id"] ?>">
+                            <input type="hidden" name="added_article_id" value="<?= $result["id"] ?>">
                             <button type="submit" class="btn btn-primary"><a class="btn btn-primary">Ajouter au panier</a></button>
                         </form>
                     </div>
@@ -69,11 +131,9 @@ function showArticles()
             </div>
         </div>
 <?php
-    }
+} 
 }
-?>
 
-<?php
 /* This function create the cart if it is not create */
 function createCart()
 {
