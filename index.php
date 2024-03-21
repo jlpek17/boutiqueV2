@@ -25,10 +25,11 @@ resetOnSuccess();
 
             <form method="POST" action="./index.php">
                 <label for="gamme">Filtrer:</label>
-                <select id="gamme" name="gamme" size=3 multiple>
-                    <option value="all">Tout</option>    
-                    <option value="1">Gamme 1</option>
-                    <option value="2">Gamme 2</option>
+                <select id="gamme" name="gamme" size=4 multiple>
+                    <?php
+                    showGamme();
+                    ?>
+                    <option value="all">tout</option>
                 </select>
                 <input type="submit" value="appliquer">
             </form>

@@ -46,23 +46,26 @@ function getGammes()
     $db = getConnection();
 
     // j'exécute une requête qui va récupérer tous les articles
-    $results = $db->query('SELECT * FROM id_gamme');
+    $gamme = $db->query('SELECT * FROM gammes');
 
     // je récupère les résultats et je les renvoie grâce à return
-    return $results->fetchAll();
+    return $gamme->fetchAll();
 }
 
 
-function getArticlesbyGammes()
-{
-    // je me connecte à la base de données
-    $db = getConnection();
+function showGamme() {
 
-    // j'exécute une requête qui va récupérer tous les articles
-    $results = $db->query('SELECT * FROM articles WHERE id_gamme="1"');
+    //get all gammes
+    $allGammes = getGammes();
+    var_dump($allGammes);
 
-    // je récupère les résultats et je les renvoie grâce à return
-    return $results->fetchAll();
+    foreach($allGammes as $gamme) {      
+    }
+?>
+
+            <option value="<?= $gamme["nom"]; ?>"><?= $gamme["nom"]; ?></option>
+<?php
+
 }
 
 
@@ -467,4 +470,25 @@ $shippingCosts = [];
         $_SESSION["shippingCosts"] = $shippingCosts;
     
 }
+
+?>
+
+<?php
+/* ***** REGISTER ***** */
+
+/* ***** VERIFIER qu'aucun input n'est vide ***** */
+
+function checkEmptyField() {
+    foreach ($_POST as $field) {
+        if (empty($field)) {
+            echo empty($field);
+            return true;
+        } 
+        echo "oui";
+        return false;
+    }
+}
+
+
+
 ?>

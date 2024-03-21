@@ -18,6 +18,12 @@ createCart()
           <li class="nav-item">
             <a class="nav-link" href="cart.php">Panier<?= "(" . quantityArticle() . ")"; ?></a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i>Inscription</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="connexion.php"><i class="fa-regular fa-user"></i>Connexion</a>
+          </li>
         </ul>
       </div>
     </div>
