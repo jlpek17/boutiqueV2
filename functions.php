@@ -474,7 +474,7 @@ $shippingCosts = [];
 <?php
 
 
-/* ***** verifier element inscription ***** */
+/* ***** INSCRIPTION ***** */
 
 function checkInfoRegistration() {
 
@@ -531,6 +531,10 @@ function checkInfoRegistration() {
                 /* */
                 $lastRecordedId = $db->lastInsertId();
                 addAddress($lastRecordedId);
+                ?>
+                <script>window.alert("vous êtes desormais inscrit à WorldWatch");</script>
+                <?php
+
                 }
             }
         }         
@@ -598,7 +602,41 @@ function addAddress ($lastRecordedId ) {
     'ville' => strip_tags($_POST["registeredCity"]),
     'idClient' => $lastRecordedId 
     ]);
+}
 
+/* ***** VERIFIER CONNEXION ***** */
+
+function checkCustomer() {
+
+     /* je me connecte à la bd */
+     $db = getConnection();
+
+     /* ***** je tente de recuperer l'email du client dans la BD ***** */
+     $checkCustomer = $db->prepare("SELECT * FROM clients WHERE email = ?");
+     $checkCustomer->execute([$_POST["connexionEmail"]]);
+     $checkCustomer = $checkCustomer->fetch();
+
+     /* ***** si la variable est vide la client n'espt pas inscrit ***** */
+     if (empty($checkCustomer)) {
+        echo "client non inscrit";
+
+        /* ***** sinon je recupere toutes ses données dans $_SESSION ***** */
+     } else {
+        if(!password_verify($_POST["ConnexionPW"],$checkCustomer["mot_de_passe"])) {
+            echo "le mot de passe ne correspond pas à l'email utilisateurs";
+        
+        } else {
+
+        $_SESSION["user"] = [
+            'id' => $checkCustomer["id"],
+            'nom' => $checkCustomer["nom"],
+            'prenom' => $checkCustomer["prenom"],
+            'email' => $checkCustomer["email"]
+        ];
+        echo "connexion reussie";
+    }
+}
+     var_dump($_SESSION["user"]);
 }
 
 ?>

@@ -1,22 +1,28 @@
 <?php
-session_start();
+/* ***** make available the functions from the file ***** */
 include("functions.php");
+
+/* ***** create the session (cookie and varable) ***** */
+session_start();
+
 ?>
 
-
+<!-- START HTML -->
 <!DOCTYPE html>
 <html lang="fr">
 
-
-<?php
-include("head.php");
-?>
-
-
+    <?php
+    /* ***** fetch the <head> part of the page (meta / title / link / ...) ***** */
+    include("head.php");
+    ?>
 
 <body>
+    
+    <!-- wrapper to limit the wide of the webpage to px (check on css)-->
     <div class="container-fluid" id="wrapper">
+
         <?php
+        /* ***** fetch the <header> part of the page (navbar / ...) ***** */
         include("header.php");
         ?>
 
