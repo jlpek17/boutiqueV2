@@ -60,12 +60,10 @@ function showGamme() {
     var_dump($allGammes);
 
     foreach($allGammes as $gamme) {      
+    ?>
+        <option value="<?= $gamme["id"]; ?>"><?= $gamme["nom"]; ?></option>
+    <?php
     }
-?>
-
-            <option value="<?= $gamme["nom"]; ?>"><?= $gamme["nom"]; ?></option>
-<?php
-
 }
 
 
@@ -474,21 +472,133 @@ $shippingCosts = [];
 ?>
 
 <?php
-/* ***** REGISTER ***** */
 
-/* ***** VERIFIER qu'aucun input n'est vide ***** */
 
-function checkEmptyField() {
-    foreach ($_POST as $field) {
-        if (empty($field)) {
-            echo empty($field);
-            return true;
-        } 
-        echo "oui";
-        return false;
+/* ***** verifier element inscription ***** */
+
+function checkInfoRegistration() {
+
+    $db = getConnection();
+
+    /* ***** 1 - looking for empty field (alert on error) ***** */
+
+    if (checkEmptyField()) {
+        echo "un ou plusieurs champs vides";
+
+        // otherwise, we continue
+    } else {
+
+            /* ***** 2 : check for length field: compatibility of db attributes (alert on error) ***** */
+
+        if (!checkInputLength()) {
+            echo "un ou plusieurs champs ne respecte pas les conditions des données";
+
+            // otherwise, we continue
+        } else {
+
+            $chosenEmail = $_POST["registeredEmail"];
+
+                     /* ***** 3 : check for duplicate email in db ***** */
+
+            $checkEmail = $db->prepare("SELECT email FROM clients WHERE email = ?");
+            $checkEmail->execute([$_POST["registeredEmail"]]);
+            $checkEmail = $checkEmail->fetch();
+
+                        // alert if email address already in use   
+            if($checkEmail){
+                echo "adresse email deja utilisée par un autre client";
+
+                    // otherwise, we continue
+            } else {
+
+            /* ***** 4 : check for secure for password (alert on error) ***** */  
+
+                if (!checkPassword($_POST["registeredPassword"])) {
+                    echo "le password n'est pas conforme";    
+                
+                    // otherwise, we continue
+                } else {
+                    echo "le password est conforme";
+
+                $clientToRecord = $db->prepare("INSERT INTO clients (nom, prenom, email, mot_de_passe) VALUES (:nom, :prenom, :email, :pw)");
+                $clientToRecord->execute([
+                'nom' => strip_tags($_POST["registeredLastName"]),
+                'prenom' => strip_tags($_POST["registeredFirstName"]),
+                'email' => strip_tags($_POST["registeredEmail"]),
+                'pw' => strip_tags(password_hash($_POST["registeredPassword"],PASSWORD_DEFAULT))
+                ]);
+
+                /* */
+                $lastRecordedId = $db->lastInsertId();
+                addAddress($lastRecordedId);
+                }
+            }
+        }         
     }
 }
 
 
+
+
+/* ***** fonction VERIFIER qu'aucun input n'est vide ***** */
+
+function checkEmptyField() {
+    foreach ($_POST as $field) {
+        if (empty($field)) {
+            echo "des champs ne sont pas remplis";            
+            return true;
+        } 
+    }
+    echo "tous les champs sont remplis";
+    return false;
+}
+
+/* ***** fonction VERIFIER que la longueur des champs est correcte ***** */
+
+function checkInputLength() {
+    
+    if(strlen($_POST["registeredFirstName"]) > 25 || strlen($_POST["registeredFirstName"]) < 3) {
+        return false;
+    }
+    if (strlen($_POST["registeredLastName"]) > 25 || strlen($_POST["registeredLastName"]) < 3) {
+        return false;
+    }
+    if (strlen($_POST["registeredEmail"]) > 25 || strlen($_POST["registeredEmail"]) < 5) {
+        return false;;
+    }
+    if (strlen($_POST["registeredZipCode"]) !== 5) {
+        return false;;
+    }
+    if (strlen($_POST["registeredCity"]) > 25 || strlen($_POST["registeredCity"]) < 3) {
+        return false;;
+    } 
+    return true;
+}
+
+
+function checkPassword($password) {
+    // min 8 caractere, max 15 caractere, min 1
+    $regex ="^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?/&])(?=\S+$).{8,15}$^";
+    
+    if(preg_match($regex, $password) == true) {
+        return preg_match($regex, $password);
+    }
+}
+
+function addAddress ($lastRecordedId ) {
+
+    /* je me connecte à la bd */
+    $db = getConnection();
+
+    /* j'insere l'adresse du client avec son id dans la table adresse */
+    $clientToRecord = $db->prepare("INSERT INTO adresses (adresse, code_postal, ville, id_client) VALUES (:adresse, :codePostal, :ville, :idClient)");
+    $clientToRecord->execute([
+    'adresse' => strip_tags($_POST["registeredAddress"]),
+    'codePostal' => strip_tags($_POST["registeredZipCode"]),
+    'ville' => strip_tags($_POST["registeredCity"]),
+    'idClient' => $lastRecordedId 
+    ]);
+
+}
 
 ?>

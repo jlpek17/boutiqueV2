@@ -25,7 +25,7 @@ resetOnSuccess();
 
             <form method="POST" action="./index.php">
                 <label for="gamme">Filtrer:</label>
-                <select id="gamme" name="gamme" size=4 multiple>
+                <select id="gamme" name="gamme" multiple>
                     <?php
                     showGamme();
                     ?>
