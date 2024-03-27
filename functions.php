@@ -72,6 +72,7 @@ function showGamme() {
 function filterArticles(){
 
     // je récupère tous les articles
+    $_SESSION["gamme"] = "all";
     $allArticles = getArticles();
 
     // je stocke dans le session le choix de gamme si effectué précédemment
@@ -604,6 +605,7 @@ function addAddress ($lastRecordedId ) {
     ]);
 }
 
+
 /* ***** VERIFIER CONNEXION ***** */
 
 function checkCustomer() {
@@ -611,14 +613,19 @@ function checkCustomer() {
      /* je me connecte à la bd */
      $db = getConnection();
 
+     /* Intiatlise variable in order to exclude error at laucnch */
+     //$_POST["connexionEmail"] = "";
+     $_SESSION["user"] = "";
+
      /* ***** je tente de recuperer l'email du client dans la BD ***** */
-     $checkCustomer = $db->prepare("SELECT * FROM clients WHERE email = ?");
+     $checkCustomer = $db->prepare("SELECT c.id, c.nom, c.prenom, c.email, c.mot_de_passe, a.adresse FROM clients c INNER JOIN adresses a ON c.id = a.id_client WHERE email = ?");
      $checkCustomer->execute([$_POST["connexionEmail"]]);
      $checkCustomer = $checkCustomer->fetch();
 
      /* ***** si la variable est vide la client n'espt pas inscrit ***** */
      if (empty($checkCustomer)) {
         echo "client non inscrit";
+
 
         /* ***** sinon je recupere toutes ses données dans $_SESSION ***** */
      } else {
@@ -627,16 +634,19 @@ function checkCustomer() {
         
         } else {
 
+
         $_SESSION["user"] = [
             'id' => $checkCustomer["id"],
             'nom' => $checkCustomer["nom"],
             'prenom' => $checkCustomer["prenom"],
-            'email' => $checkCustomer["email"]
+            'email' => $checkCustomer["email"],
+            'adresse' => $checkCustomer["adresse"]
         ];
-        echo "connexion reussie";
+        ?>
+        <script>window.alert("vous êtes desormais inscrit à WorldWatch");</script>
+        <?php
     }
 }
-     var_dump($_SESSION["user"]);
 }
 
 ?>
