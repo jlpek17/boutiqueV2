@@ -629,11 +629,15 @@ function checkCustomer() {
 
         /* ***** sinon je recupere toutes ses données dans $_SESSION ***** */
      } else {
+
         if(!password_verify($_POST["ConnexionPW"],$checkCustomer["mot_de_passe"])) {
             echo "le mot de passe ne correspond pas à l'email utilisateurs";
         
         } else {
-
+            echo "le mot de passe correspond à un email utilisateurs";
+            ?>
+            <script>window.alert("vous êtes connecté");</script>
+            <?php
 
         $_SESSION["user"] = [
             'id' => $checkCustomer["id"],
@@ -642,11 +646,34 @@ function checkCustomer() {
             'email' => $checkCustomer["email"],
             'adresse' => $checkCustomer["adresse"]
         ];
-        ?>
-        <script>window.alert("vous êtes desormais inscrit à WorldWatch");</script>
-        <?php
     }
 }
+}
+?>
+
+<?php
+
+function conditionalNavbar() {
+    //$_SESSION["user"] = [];
+    if (empty($_SESSION["user"])) {
+        ?>
+        <li class="nav-item">
+            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i>Inscription</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="connexion.php"><i class="fa-regular fa-user"></i>Connexion</a>
+        </li>
+        <?php
+    } else {
+        ?>
+        <li class="nav-item">
+            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i><?= "(" . $_SESSION["user"]["prenom"] . ")";?></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="connexion.php"><i class="fa-regular fa-user"></i>Deconnexion</a>
+        </li>
+        <?php
+    }
 }
 
 ?>

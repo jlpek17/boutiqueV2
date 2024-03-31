@@ -8,7 +8,11 @@ session_start();
 /* ***** reset the cart after payment ***** */
 resetOnSuccess();
 
+/* *****  ***** */
 checkCustomer();
+
+/* ***** check if a user is connected ***** */
+//checkConnection();
 
 ?>
 
@@ -21,8 +25,6 @@ checkCustomer();
     /* ***** fetch the <head> part of the page (meta / title / link / ...) ***** */
     include("head.php");
     ?>
-
-
 
 <body>
 
