@@ -484,7 +484,9 @@ function checkInfoRegistration() {
     /* ***** 1 - looking for empty field (alert on error) ***** */
 
     if (checkEmptyField()) {
-        echo "un ou plusieurs champs vides";
+        ?>
+        <script>window.alert("un ou plusieurs champs vides");</script>
+        <?php
 
         // otherwise, we continue
     } else {
@@ -492,7 +494,9 @@ function checkInfoRegistration() {
             /* ***** 2 : check for length field: compatibility of db attributes (alert on error) ***** */
 
         if (!checkInputLength()) {
-            echo "un ou plusieurs champs ne respecte pas les conditions des données";
+            ?>
+            <script>window.alert("un ou plusieurs champs ne respecte pas les conditions des données");</script>
+            <?php
 
             // otherwise, we continue
         } else {
@@ -507,7 +511,9 @@ function checkInfoRegistration() {
 
                         // alert if email address already in use   
             if($checkEmail){
-                echo "adresse email deja utilisée par un autre client";
+                ?>
+                <script>window.alert("adresse email deja utilisée par un autre client");</script>
+                <?php
 
                     // otherwise, we continue
             } else {
@@ -515,11 +521,13 @@ function checkInfoRegistration() {
             /* ***** 4 : check for secure for password (alert on error) ***** */  
 
                 if (!checkPassword($_POST["registeredPassword"])) {
-                    echo "le password n'est pas conforme";    
+                    ?>
+                    <script>window.alert("le password n'est pas conforme");</script>
+                    <?php
                 
                     // otherwise, we continue
                 } else {
-                    echo "le password est conforme";
+
 
                 $clientToRecord = $db->prepare("INSERT INTO clients (nom, prenom, email, mot_de_passe) VALUES (:nom, :prenom, :email, :pw)");
                 $clientToRecord->execute([
@@ -580,6 +588,22 @@ function checkInputLength() {
     return true;
 }
 
+function checkInputModifyLength() {
+    
+    if(strlen($_POST["fNameModified"]) > 25 || strlen($_POST["fNameModified"]) < 3) {
+        return false;
+    }
+    if (strlen($_POST["lNameModified"]) > 25 || strlen($_POST["lNameModified"]) < 3) {
+        return false;
+    }
+    if (strlen($_POST["emailModified"]) > 25 || strlen($_POST["emailModified"]) < 5) {
+        return false;;
+    }
+    return true;
+}
+
+
+
 
 function checkPassword($password) {
     // min 8 caractere, max 15 caractere, min 1
@@ -610,18 +634,17 @@ function addAddress ($lastRecordedId ) {
 
 function connexion() {
 
-    if (!isset($_SESSION["user"]["id"])) {
-        //echo "on verifie la connexion";
+    if (!isset($_SESSION["user"]["id"]) & isset($_POST["connexionEmail"])) {
 
      /* je me connecte à la bd */
      $db = getConnection();
 
      /* Intiatlise variable in order to exclude error at laucnch */
      //$_POST["connexionEmail"] = "";
-     $_SESSION["user"] = "";
+     //$_SESSION["user"] = "";
 
      /* ***** je tente de recuperer l'email du client dans la BD ***** */
-     $checkCustomer = $db->prepare("SELECT c.id, c.nom, c.prenom, c.email, c.mot_de_passe, a.adresse FROM clients c INNER JOIN adresses a ON c.id = a.id_client WHERE email = ?");
+     $checkCustomer = $db->prepare("SELECT c.id, c.nom, c.prenom, c.email, c.mot_de_passe, a.adresse, a.code_postal, a.ville FROM clients c INNER JOIN adresses a ON c.id = a.id_client WHERE email = ?");
      $checkCustomer->execute([$_POST["connexionEmail"]]);
      $checkCustomer = $checkCustomer->fetch();
 
@@ -634,8 +657,11 @@ function connexion() {
      } else {
 
         if(!password_verify($_POST["ConnexionPW"],$checkCustomer["mot_de_passe"])) {
-            echo "le mot de passe ne correspond pas à l'email utilisateurs";
-        
+            ?>
+            <script>window.alert("le mot de passe ne correspond pas à l'email utilisateurs");</script>
+            <?php
+            
+
         } else {
             //echo "le mot de passe correspond à un email utilisateurs";
             ?>
@@ -647,7 +673,9 @@ function connexion() {
             'nom' => $checkCustomer["nom"],
             'prenom' => $checkCustomer["prenom"],
             'email' => $checkCustomer["email"],
-            'adresse' => $checkCustomer["adresse"]
+            'adresse' => $checkCustomer["adresse"],
+            'cp' => $checkCustomer["code_postal"],
+            'ville' => $checkCustomer["ville"]
         ];
             }
         }
@@ -661,20 +689,21 @@ function conditionalNavbar() {
     if (empty($_SESSION["user"])) {
         ?>
         <li class="nav-item">
-            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i>Inscription</a>
+            <a class="nav-link" href="register.php"></i>Inscription</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="connexion.php"><i class="fa-regular fa-user"></i>Connexion</a>
+            <a class="nav-link" href="connexion.php"></i>Connexion</a>
         </li>
         <?php
     } else {
         ?>
         <li class="nav-item">
-            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i>Mon compte</a>
+            <a class="nav-link" href="customers.php"><i class="fa-regular fa-user"></i>Mon compte</a>
         </li>
         <li class="nav-item">
             <form method="POST" action="index.php">
                 <button type="submit" name ="deconnexion"><i class="fa-solid fa-user-slash"></i></button>
+            </form>
         </li>
         <?php
     }
@@ -688,5 +717,56 @@ $_SESSION = [];
 <?php
 };
 }
+
+
+function updateInfos() {
+
+    if (!isset($_POST["EmailModified"])) {
+
+    $db = getConnection();
+
+    /* ***** 1 - looking for empty field (alert on error) ***** */
+
+    if (checkEmptyField()) {
+        ?>
+        <script>window.alert("un ou plusieurs champs vides");</script>
+        <?php
+
+        // otherwise, we continue
+    } else {
+
+            /* ***** 2 : check for length field: compatibility of db attributes (alert on error) ***** */
+
+        if (!checkInputModifyLength()) {
+            ?>
+            <script>window.alert("un ou plusieurs champs ne respecte pas les conditions des données");</script>
+            <?php
+
+            // otherwise, we continue
+        } else {
+
+                $clientToModify = $db->prepare("UPDATE clients SET nom = :nom, prenom = :prenom , email = :email WHERE id = :id");
+                //echo $clientToModify;
+
+                $clientToModify->execute([
+                'nom' => strip_tags($_POST["lNameModified"]),
+                'prenom' => strip_tags($_POST["fNameModified"]),
+                'email' => strip_tags($_POST["emailModified"]),
+                'id' => $_SESSION["user"]["id"]
+                ]);
+
+                ?>
+                <script>window.alert("Information mises à jour");</script>
+                <?php
+
+            
+            }
+        }         
+    }
+}
+
+
+
+
 
 ?>

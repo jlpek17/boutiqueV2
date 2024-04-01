@@ -8,11 +8,11 @@ session_start();
 /* ***** reset the cart after payment ***** */
 resetOnSuccess();
 
-/* *****  ***** */
+/* ***** verify connection information and fetch info from DB ***** */
 connexion();
 
-/* ***** verify if a disconnection is  ***** */
-disconnection()
+/* ***** verify if a disconnection query is entered  ***** */
+disconnection();
 ?>
 
 <!-- START HTML -->
@@ -39,13 +39,15 @@ disconnection()
             <h1 class="text-center">Catalogue</h1>
 
             <!-- create selector to filter product by gamme -->
-                <form method="POST" action="./index.php">
-                    <label for="gamme">Filtrer:</label>
-                    <select id="gamme" name="gamme" multiple>
-                        <?php
+
+                <form method="POST" action="index.php">
+                    <select class="form-select" id="gamme" name="gamme">
+
+                        <option>Filtrer:</option>
+                        <option value="all">tout</option>
+                        <?php                        
                         showGamme(); // this call function which create the HTML <option> element from the gamme in BD
                         ?>
-                        <option value="all">tout</option>
                     </select>
                     <input type="submit" value="appliquer">
                 </form>
@@ -59,7 +61,7 @@ disconnection()
 
         </main>
 
-    </div>
+    </div> <!-- close the wrapper -->
 
 
     <?php
