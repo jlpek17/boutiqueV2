@@ -9,11 +9,10 @@ session_start();
 resetOnSuccess();
 
 /* *****  ***** */
-checkCustomer();
+connexion();
 
-/* ***** check if a user is connected ***** */
-//checkConnection();
-
+/* ***** verify if a disconnection is  ***** */
+disconnection()
 ?>
 
 <!-- START HTML -->

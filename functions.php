@@ -608,7 +608,10 @@ function addAddress ($lastRecordedId ) {
 
 /* ***** VERIFIER CONNEXION ***** */
 
-function checkCustomer() {
+function connexion() {
+
+    if (!isset($_SESSION["user"]["id"])) {
+        //echo "on verifie la connexion";
 
      /* je me connecte à la bd */
      $db = getConnection();
@@ -634,7 +637,7 @@ function checkCustomer() {
             echo "le mot de passe ne correspond pas à l'email utilisateurs";
         
         } else {
-            echo "le mot de passe correspond à un email utilisateurs";
+            //echo "le mot de passe correspond à un email utilisateurs";
             ?>
             <script>window.alert("vous êtes connecté");</script>
             <?php
@@ -646,15 +649,15 @@ function checkCustomer() {
             'email' => $checkCustomer["email"],
             'adresse' => $checkCustomer["adresse"]
         ];
-    }
-}
+            }
+        }
+    };
 }
 ?>
 
 <?php
 
 function conditionalNavbar() {
-    //$_SESSION["user"] = [];
     if (empty($_SESSION["user"])) {
         ?>
         <li class="nav-item">
@@ -667,13 +670,23 @@ function conditionalNavbar() {
     } else {
         ?>
         <li class="nav-item">
-            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i><?= "(" . $_SESSION["user"]["prenom"] . ")";?></a>
+            <a class="nav-link" href="register.php"><i class="fa-regular fa-user"></i>Mon compte</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="connexion.php"><i class="fa-regular fa-user"></i>Deconnexion</a>
+            <form method="POST" action="index.php">
+                <button type="submit" name ="deconnexion"><i class="fa-solid fa-user-slash"></i></button>
         </li>
         <?php
     }
+}
+
+function disconnection() {
+if(isset($_POST['deconnexion'])) {
+$_SESSION = [];
+?>
+<script>window.alert("vous êtes maintenant deconnecté");</script>
+<?php
+};
 }
 
 ?>

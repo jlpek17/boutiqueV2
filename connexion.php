@@ -4,9 +4,6 @@ include("functions.php");
 
 /* ***** create the session (cookie and varable) ***** */
 session_start();
-
-/* ***** reset the cart after payment ***** */
-resetOnSuccess();
 ?>
 
 <!-- START HTML -->
