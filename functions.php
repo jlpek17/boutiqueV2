@@ -589,15 +589,17 @@ function checkInputLength() {
 }
 
 function checkInputModifyLength() {
-    
     if(strlen($_POST["fNameModified"]) > 25 || strlen($_POST["fNameModified"]) < 3) {
-        return false;
+        //return false;
+        echo "stop à fname";
     }
     if (strlen($_POST["lNameModified"]) > 25 || strlen($_POST["lNameModified"]) < 3) {
-        return false;
+        //return false;
+        echo "stop à lname";
     }
     if (strlen($_POST["emailModified"]) > 25 || strlen($_POST["emailModified"]) < 5) {
-        return false;;
+        //return false;
+        echo "stop à email";
     }
     return true;
 }
@@ -710,18 +712,16 @@ function conditionalNavbar() {
 }
 
 function disconnection() {
-if(isset($_POST['deconnexion'])) {
-$_SESSION = [];
-?>
-<script>window.alert("vous êtes maintenant deconnecté");</script>
-<?php
-};
+    if(isset($_POST['deconnexion'])) {
+        $_SESSION = [];
+    ?>
+    <script>window.alert("vous êtes maintenant deconnecté");</script>
+    <?php
+    };
 }
 
 
 function updateInfos() {
-
-    if (!isset($_POST["EmailModified"])) {
 
     $db = getConnection();
 
@@ -745,15 +745,25 @@ function updateInfos() {
             // otherwise, we continue
         } else {
 
+                $newLname = strip_tags($_POST["lNameModified"]);
+                $newFname = strip_tags($_POST["fNameModified"]);
+                $newEmail = strip_tags($_POST["emailModified"]);
+
+
+
                 $clientToModify = $db->prepare("UPDATE clients SET nom = :nom, prenom = :prenom , email = :email WHERE id = :id");
                 //echo $clientToModify;
 
                 $clientToModify->execute([
-                'nom' => strip_tags($_POST["lNameModified"]),
-                'prenom' => strip_tags($_POST["fNameModified"]),
-                'email' => strip_tags($_POST["emailModified"]),
-                'id' => $_SESSION["user"]["id"]
+                'nom' => $newLname,
+                'prenom' => $newFname,
+                'email' => $newEmail,
+                'id' => $_SESSION["user"]['id']
                 ]);
+
+                $_SESSION["user"]['nom'] = $newLname;
+                $_SESSION["user"]['prenom'] = $newFname;
+                $_SESSION["user"]['email'] = $newEmail;
 
                 ?>
                 <script>window.alert("Information mises à jour");</script>
@@ -763,8 +773,17 @@ function updateInfos() {
             }
         }         
     }
+
+
+function updateAdress() {
+    
 }
 
+
+
+function updatePW () {
+
+}
 
 
 

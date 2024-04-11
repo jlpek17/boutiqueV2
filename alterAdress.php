@@ -35,9 +35,19 @@ include("head.php");
             <div class="card-body d-flex flex-column align-items-center">
                 <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4"><i class="fa-solid fa-map-location"></i> Mon Adresse</div>
                 <form class="text-center" method="post" action="customers.php">
-                    <div class="mb-3"><input class="form-control" type="email" name="adressModified" placeholder="<?= $_SESSION["user"]["adresse"]; ?>" />Adresse</div>
-                    <div class="mb-3"><input class="form-control" type="text" name="cpModified" placeholder="<?= $_SESSION["user"]["cp"]; ?>" />Code Postal</div>
-                    <div class="mb-3"><input class="form-control" type="text" name="cityModified" placeholder="<?= $_SESSION["user"]["ville"]; ?>" />Ville</div>
+
+                    <div class="mb-3">
+                        Adresse
+                        <input class="form-control" type="text" name="adressModified" placeholder="<?= $_SESSION["user"]["adresse"]; ?>" />
+                    </div>
+                    <div class="mb-3">
+                        Code Postal
+                        <input class="form-control" type="text" name="cpModified" placeholder="<?= $_SESSION["user"]["cp"]; ?>" />
+                    </div>
+                    <div class="mb-3">
+                        Ville
+                        <input class="form-control" type="text" name="cityModified" placeholder="<?= $_SESSION["user"]["ville"]; ?>" />
+                    </div>
 
                     <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Modifier</button></div>
                 </form>
