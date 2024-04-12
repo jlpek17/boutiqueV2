@@ -5,6 +5,10 @@ include("functions.php");
 /* ***** create the session (cookie and varable) ***** */
 session_start();
 
+if (isset($_POST["adressModified"])) {
+    updateAdress();
+    }
+
 ?>
 
 <!-- START HTML -->
@@ -34,19 +38,19 @@ include("head.php");
 
             <div class="card-body d-flex flex-column align-items-center">
                 <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4"><i class="fa-solid fa-map-location"></i> Mon Adresse</div>
-                <form class="text-center" method="post" action="customers.php">
+                <form class="text-center" method="post" action="alterAdress.php">
 
                     <div class="mb-3">
                         Adresse
-                        <input class="form-control" type="text" name="adressModified" placeholder="<?= $_SESSION["user"]["adresse"]; ?>" />
+                        <input class="form-control" type="text" name="adressModified" value="<?= $_SESSION["user"]["adresse"]; ?>" />
                     </div>
                     <div class="mb-3">
                         Code Postal
-                        <input class="form-control" type="text" name="cpModified" placeholder="<?= $_SESSION["user"]["cp"]; ?>" />
+                        <input class="form-control" type="text" name="cpModified" value="<?= $_SESSION["user"]["cp"]; ?>" />
                     </div>
                     <div class="mb-3">
                         Ville
-                        <input class="form-control" type="text" name="cityModified" placeholder="<?= $_SESSION["user"]["ville"]; ?>" />
+                        <input class="form-control" type="text" name="cityModified" value="<?= $_SESSION["user"]["ville"]; ?>" />
                     </div>
 
                     <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Modifier</button></div>

@@ -47,7 +47,8 @@ if (isset($_POST["registeredLastName"])) {
                         </div>
                         <div class="mb-3">
                             <label for="ConnexionPW" class="form-label">Mot de passe</label>
-                            <input type="password" class="form-control" name="ConnexionPW">
+                            <input type="password" class="form-control" name="ConnexionPW" aria-describedby="PWHelp">
+                            <div id="PWHelp" class="form-text">8 caracteres minimum dont 1 caractere spécial et 1 majuscule </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Se connecter</button>
                     </form>

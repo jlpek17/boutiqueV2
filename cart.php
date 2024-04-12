@@ -2,10 +2,6 @@
 session_start();
 include("functions.php");
 
-/* LOGIC */
-
-/* initialise some variable */
-
 if (!isset($_POST["expedition"])) {
   $_POST["expedition"] = [];
 }
@@ -13,8 +9,8 @@ if (!isset($_POST["expedition"])) {
 /* creation of cart if it is not already create */
 createCart();
 
-/* This part increase quantity when users click from index.php or product.php*/
 
+/* This part increase quantity when users click from index.php or product.php*/
 if (isset($_POST["added_article_id"])) {
 
   /* get article id of the article to add to cart */
@@ -108,36 +104,6 @@ include("head.php");
         <div class="col-md-6 d-flex justify-content-center">
 
           <div class="card d-flex justify-content-center" style="width: 30rem; padding: 1rem;">
-            <form class="form-check" method="POST" action="cart.php">
-              <legend>Selectionner votre mode d'expedition :</legend>
-
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if ($_POST["expedition"] == "Colissimo") {
-                                                                                                                    echo "checked";
-                                                                                                                  }; ?>>
-                <label class="form-check-label" for="inlineRadio1">Colissimo</label>
-              </div>
-
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if ($_POST["expedition"] == "Point Relais") {
-                                                                                                                      echo "checked";
-                                                                                                                    }; ?>>
-                <label class="form-check-label" for="inlineRadio2">Point Relais</label>
-              </div>
-
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if ($_POST["expedition"] == "Retrait Magasin") {
-                                                                                                                          echo "checked";
-                                                                                                                        }; ?>>
-                <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
-              </div>
-
-              <div class="col d-flex justify-content-center">
-                <?= selectExpeditionMethod(); ?>
-              </div>
-
-            </form>
-
 
             <p class="card-title">
               <b>Sous-total : <?= number_format(grandTotal(), 2, ",", " ") . " €</b>" . "<i> (dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></i>
