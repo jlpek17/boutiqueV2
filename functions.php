@@ -8,7 +8,7 @@ function getConnection()
     try {
         $db = new PDO(
             'mysql:host=localhost;dbname=boutique_en_ligne;charset=utf8', // infos : sgbd, nom base, adresse (host) + encodage
-            'phpmyadmin', // pseudo utilisateur (root en local)
+            'root', // pseudo utilisateur (root en local)
             'jlpek17', // mot de passe (aucun en local)
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC)
         ); // options PDO : 1) affichage des erreurs / 2) récupération des données simplifiée
