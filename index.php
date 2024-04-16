@@ -44,7 +44,7 @@ disconnection();
                     <select class="form-select" id="gamme" name="gamme">
 
                         <option>Filtrer:</option>
-                        <option value="all">tout</option>
+                        <option value="all">Tout</option>
                         <?php                        
                         showGamme(); // this call function which create the HTML <option> element from the gamme in BD
                         ?>
