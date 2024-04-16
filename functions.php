@@ -1,6 +1,6 @@
 <?php
 
-/* ***** Connexion a la BDD ***** */
+/* ***** Connexion to the BDD ***** */
 
 function getConnection()
 {
