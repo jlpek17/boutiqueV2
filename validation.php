@@ -55,7 +55,7 @@ include("head.php");
                         </div>---------->
 
                         <!---------- CADRE COORDONNEES ---------->
-                        <div class="col">
+                        <div class="col-md-5">
                             <div class="ref-order-customer">
                                 <h2>Coordonées</h2>
                                 <div class="ref-order-line ref-customer-name"><b>Nom</b><?= $_SESSION["user"]["nom"]; ?></div>
@@ -65,7 +65,7 @@ include("head.php");
                         </div>
 
                         <!---------- CADRE EXPEDITION ---------->
-                        <div class="col">
+                        <div class="col-md-7">
                             <div class="ref-order-shipping">
                                 <h2>Expedition</h2>
                                 <div class="ref-order-line ref-shipping-method"><b>Methode</b>

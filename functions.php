@@ -70,7 +70,7 @@ function getAddresses()
 
     // j'exécute une requête qui va récupérer tous les adresses du user
 //    $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = $_SESSION["user"]["id"]');
-      $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = 20');
+      $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = 2');
     // je récupère les résultats et je les renvoie grâce à return
     return $addressToShip->fetchAll();
 }
@@ -402,9 +402,10 @@ function deleteFromCart($articleToDelete)
 /* This function print the button for "validation" modal only if the cart is not empty */
 function finalizeButton()
 {
-    if (grandTotal() > 0 && $_POST["expedition"] != null) {
+//    if (grandTotal() > 0 && $_POST["expedition"] != null) {
+    if (grandTotal() > 0) {
 ?>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Finaliser ma Commande</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Valider ma Commande</button>
 <?php
     }
 }
@@ -417,7 +418,7 @@ function ResetButton()
 {
     if (grandTotal() > 0) {
 ?>
-        <form method="post">
+        <form method="POST">
             <input type="submit" name="resetCart" class="btn btn-danger" value="Vider mon Panier">
         </form>
 <?php
@@ -986,5 +987,11 @@ function updatePW()
         }
     }
 }
+
+function recordOrder() 
+{
+
+}
+
 
 ?>
