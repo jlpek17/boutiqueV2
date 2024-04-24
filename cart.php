@@ -108,7 +108,7 @@ include("head.php");
             <p class="card-title">
               <b>Sous-total : <?= number_format(grandTotal(), 2, ",", " ") . " €</b>" . "<i> (dont TVA : " . number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></i>
             </p>
-            <p class="card-title"> Frais d'expédition <?= showExpeditionMethod(); ?>: Calculé à l'etape suivante </p>
+            <p class="card-title"> Frais d'expédition: <?php // showExpeditionMethod(); ?> Calculé à l'etape suivante </p>
 
             <!-- Button trigger modal Validation (appear if the cart is not empty) -->
 

@@ -451,7 +451,8 @@ function quantityArticle()
 function selectExpeditionMethod()
 {
     //if ($_POST["expedition"] !== "Point Relais" && $_POST["expedition"] !== "Retrait Magasin" && $_POST["expedition"] !== "Colissimo") {
-    if ($_SESSION ["expedition"] == '' && $_SESSION["cart"] != null) {
+    //if ($_SESSION ["expedition"] == '' && $_SESSION["cart"] != null) {
+    if (!isset($_SESSION ["expedition"])) {
 ?>
 
         <form method="post">
@@ -459,7 +460,9 @@ function selectExpeditionMethod()
         </form>
     <?php
     }
-    if ($_SESSION["expedition"] != null) {
+    //if ($_SESSION["expedition"] != null) {
+    if (isset($_SESSION["expedition"])) {
+
     ?>
         <form method="post">
             <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="Changer">
@@ -505,12 +508,9 @@ function payExpedition()
 
     $expeditionCost = '';
     $shippingCosts = '';
-    /*
-    if (!isset($_SESSION["expedition"])) {
-        $shippingCosts = "Aucune Selection";
-    } else { 
-    */
-    switch ($_POST["expedition"]) {
+    
+    if (isset($_SESSION["expedition"])) {
+    switch ($_SESSION["expedition"]) {
 
         case "":
             $shippingCosts = "Aucune Selection";
@@ -531,9 +531,10 @@ function payExpedition()
             $shippingCosts = "Frais d'expedition <b>offert</b> !";
             break;
     }
-    
+
     $_SESSION["expeditionCost"] = $expeditionCost;
     $_SESSION["shippingCosts"] = $shippingCosts;
+}
 }
 
 ?>

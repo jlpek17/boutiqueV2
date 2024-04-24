@@ -66,7 +66,7 @@ include("head.php");
                                 <div class="ref-order-line ref-customer-name"><b>Nom</b><?= $_SESSION["user"]["nom"]; ?></div>
                                 <div class="ref-order-line ref-customer-name"><b>Prenom</b><?= $_SESSION["user"]["prenom"]; ?></div>
                                 <div class="ref-order-line ref-customer-email"><b>email</b><?= $_SESSION["user"]["email"]; ?></div>
-                                <div><?php var_dump($_SESSION["shippingCosts"])?></div>
+                                <div><?php //var_dump($_SESSION["shippingCosts"])?></div>
                             </div>
                         </div>
 
@@ -121,7 +121,7 @@ include("head.php");
                                     </select>
                                     <input type="submit" value="appliquer">
                                 </form>
-                                <span>Adresse sellectionnée : <?php if ($_SESSION["AddressToShip"] == '') { echo " Aucune selection"; } else { echo $_SESSION["AddressToShip"]; } ?></span>
+                                <span>Adresse sellectionnée : <?php if (!isset($_SESSION["AddressToShip"])) { echo " Aucune selection"; } else { echo $_SESSION["AddressToShip"]; } ?></span>
                             
                             </div>
                         </div>
@@ -135,14 +135,17 @@ include("head.php");
                                 <div class="ref-order-line ref-line-item">Sous-Total:<span class="ref-price"><?= number_format(grandTotal(), 2, ",", " ") . " €</b>"; ?></span></div>
                                 <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?= $_SESSION["shippingCosts"] ?></span></div>
                                 <div class="ref-order-line ref-line-item">
-                                    <div class="ref-name">dont TVA</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></span>
+                                    <div class="ref-name">dont TVA:</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></span>
                                 </div>
                                 <hr />
                                 <div class="ref-order-line ref-line-item">
-                                    Total <b><span class="ref-price"><?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></span></b>
+                                    Total: <b><span class="ref-price"><?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></span></b>
                                 </div>
+                                <?php if(isset($_SESSION["expedition"]) && isset($_SESSION["AddressToShip"])) { ?>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
-
+                                <?php 
+                                }
+                                ?>
                             </div>
                         </div>
 
