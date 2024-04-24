@@ -9,12 +9,15 @@ session_start();
 
 /* ***** initialize variable of expedition choice BEFORE CHOICE***** */
 if (!isset($_POST["expedition"])) {
-    $_POST["expedition"] = [];
+    //$_POST["expedition"] = [];
+    $_POST["expedition"] = '';
 }
 
 /* ***** keep the variable of the address to ship in $_SESSION ***** */
 if(isset($_POST["addressToShow"])) {
     $_SESSION["AddressToShip"] = $_POST["addressToShow"];
+} else {
+    $_SESSION["AddressToShip"] = '';
 }
 
 
@@ -61,6 +64,7 @@ include("head.php");
                                 <div class="ref-order-line ref-customer-name"><b>Nom</b><?= $_SESSION["user"]["nom"]; ?></div>
                                 <div class="ref-order-line ref-customer-name"><b>Prenom</b><?= $_SESSION["user"]["prenom"]; ?></div>
                                 <div class="ref-order-line ref-customer-email"><b>email</b><?= $_SESSION["user"]["email"]; ?></div>
+                                <div><?php var_dump($_SESSION["user"]["id"]); ?> </div>
                             </div>
                         </div>
 
@@ -115,7 +119,7 @@ include("head.php");
                                     </select>
                                     <input type="submit" value="appliquer">
                                 </form>
-                                <span>Adresse: <?= $_SESSION["AddressToShip"]; ?></span>
+                                <span>Adresse sellectionnée : <?php if ($_SESSION["AddressToShip"] == '') { echo " Aucune selection"; } else { echo $_SESSION["AddressToShip"]; } ?></span>
                             
                             </div>
                         </div>
@@ -127,7 +131,7 @@ include("head.php");
                                 <?php showArticleInCart(); ?>
                                 <hr />
                                 <div class="ref-order-line ref-line-item">Sous-Total:<span class="ref-price"><?= number_format(grandTotal(), 2, ",", " ") . " €</b>"; ?></span></div>
-                                <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?= $_SESSION["shippingCosts"]; ?></span></div>
+                                <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?php if ($_SESSION["shippingCosts"] == '') { echo ($_SESSION["shippingCosts"]); } else { echo "Aucune selection"; } ?></span></div>
                                 <div class="ref-order-line ref-line-item">
                                     <div class="ref-name">TVA</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></span>
                                 </div>

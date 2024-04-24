@@ -69,8 +69,8 @@ function getAddresses()
     $db = getConnection();
 
     // j'exécute une requête qui va récupérer tous les adresses du user
-//    $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = $_SESSION["user"]["id"]');
-      $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = 2');
+//      $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = $_SESSION["user"]["id"]');
+    $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = 2');
     // je récupère les résultats et je les renvoie grâce à return
     return $addressToShip->fetchAll();
 }
