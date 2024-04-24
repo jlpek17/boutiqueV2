@@ -37,7 +37,11 @@ disconnection();
 
         <main>
             <h1 class="text-center">Catalogue</h1>
-            <div><?= $_POST["validationOK"]?></div>
+            <div><?= date('d-m-y h:i:s'); ?></div>
+            <div><?= $_SESSION["user"]["id"]; ?></div>
+            <div><?= $_SESSION["totalOrder"] ?></div>
+            <div><?= rand(1000000, 9999999) ?></div>
+
 
             <!-- create selector to filter product by gamme -->
 

@@ -70,7 +70,13 @@ function getAddresses()
 
     // j'exécute une requête qui va récupérer tous les adresses du user
 //      $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = $_SESSION["user"]["id"]');
+
+//  $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = ?');
+//  $addressToShip->execute($_SESSION["user"]["id"]);
+//  $addressToShip = $addressToShip->fetch();
+    
     $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = 2');
+
     // je récupère les résultats et je les renvoie grâce à return
     return $addressToShip->fetchAll();
 }
@@ -178,6 +184,7 @@ function resetOnSuccess()
 {
     if (isset($_POST["validationOK"])) {
         //echo isset($_POST["resetIfSuccess"]);
+        recordOrder();
         $_SESSION["cart"] = [];
     }
 }
@@ -450,8 +457,6 @@ function quantityArticle()
 /* This function calculate the amount of shipping costs */
 function selectExpeditionMethod()
 {
-    //if ($_POST["expedition"] !== "Point Relais" && $_POST["expedition"] !== "Retrait Magasin" && $_POST["expedition"] !== "Colissimo") {
-    //if ($_SESSION ["expedition"] == '' && $_SESSION["cart"] != null) {
     if (!isset($_SESSION ["expedition"])) {
 ?>
 
@@ -460,7 +465,7 @@ function selectExpeditionMethod()
         </form>
     <?php
     }
-    //if ($_SESSION["expedition"] != null) {
+
     if (isset($_SESSION["expedition"])) {
 
     ?>
@@ -506,35 +511,36 @@ function emptyCartTitle()
 function payExpedition()
 {
 
-    $expeditionCost = '';
+    $expeditionCost = 0;
     $shippingCosts = '';
     
     if (isset($_SESSION["expedition"])) {
-    switch ($_SESSION["expedition"]) {
+            
+        switch ($_SESSION["expedition"]) {
 
-        case "":
-            $shippingCosts = "Aucune Selection";
+            case "Colissimo":
+                $expeditionCost = quantityArticle() * 7;
 
-        case "Colissimo":
-            $expeditionCost = quantityArticle() * 7;
+                $shippingCosts = "Frais d'expedition (7€ par montre) : " . $expeditionCost . "€";
+                break;
 
-            $shippingCosts = "Frais d'expedition (7€ par montre) : " . $expeditionCost . "€";
-            break;
+            case "Point Relais":
+                $expeditionCost = quantityArticle() * 3;
+                $shippingCosts = "Frais d'expedition (3€ par montre) : " . $expeditionCost . "€";
+                break;
 
-        case "Point Relais":
-            $expeditionCost = quantityArticle() * 3;
-            $shippingCosts = "Frais d'expedition (3€ par montre) : " . $expeditionCost . "€";
-            break;
+            case "Retrait Magasin":
+                $expeditionCost = 0;
+                $shippingCosts = "Frais d'expedition <b>offert</b> !";
+                break;
+        }
+    } else {
 
-        case "Retrait Magasin":
-            $expeditionCost = 0;
-            $shippingCosts = "Frais d'expedition <b>offert</b> !";
-            break;
+        $shippingCosts = "Aucune Selection";
     }
 
     $_SESSION["expeditionCost"] = $expeditionCost;
     $_SESSION["shippingCosts"] = $shippingCosts;
-}
 }
 
 ?>
@@ -1001,6 +1007,20 @@ function updatePW()
 
 function recordOrder() 
 {
+
+/* ***** Connection to the DB ***** */
+    $db = getConnection();
+
+/* ***** Add order references to the DB ***** */
+
+    $orderToAdd = $db->prepare("INSERT INTO commandes (id_client, numero, date_commande, prix) VALUES (:idClient, :numero, :dateCommande, :prix)");
+    $orderToAdd->execute([
+        'idClient' => strip_tags($_SESSION["user"]["id"]),
+        'numero' => strip_tags(rand(1000000, 9999999)),
+        'dateCommande' => strip_tags(date('d-m-y h:i:s')),
+        'prix' => strip_tags($_SESSION["totalOrder"])
+    ]);
+
 
 }
 

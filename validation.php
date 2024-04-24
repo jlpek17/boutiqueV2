@@ -99,7 +99,9 @@ include("head.php");
                                             </div>
 
                                             <div class="col d-flex justify-content-center">
-                                                <?= selectExpeditionMethod(); ?>
+                                                <?php
+                                                    selectExpeditionMethod();
+                                                ?>
                                             </div>
                                         </form>
                                     </span>
@@ -135,11 +137,16 @@ include("head.php");
                                 <div class="ref-order-line ref-line-item">Sous-Total:<span class="ref-price"><?= number_format(grandTotal(), 2, ",", " ") . " €</b>"; ?></span></div>
                                 <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?= $_SESSION["shippingCosts"] ?></span></div>
                                 <div class="ref-order-line ref-line-item">
-                                    <div class="ref-name">dont TVA:</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></span>
+                                    <div class="ref-name">dont TVA:</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €"; ?></span>
                                 </div>
                                 <hr />
                                 <div class="ref-order-line ref-line-item">
-                                    Total: <b><span class="ref-price"><?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></span></b>
+                                    Total: <b><span class="ref-price">
+                                        <?php
+                                            $_SESSION["totalOrder"] =  number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €";
+                                            echo $_SESSION["totalOrder"];
+                                            ?>
+                                            </span></b>
                                 </div>
                                 <?php if(isset($_SESSION["expedition"]) && isset($_SESSION["AddressToShip"])) { ?>
                                     <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
@@ -158,7 +165,7 @@ include("head.php");
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?>.
+              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= $_SESSION["totalOrder"] ?>.
               Nous vous remercion de votre confiance.
             </div>
             <div class="modal-footer">
