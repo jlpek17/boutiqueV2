@@ -8,8 +8,10 @@ session_start();
 /* ***** LOGIC ***** */
 
 /* ***** initialize variable of expedition choice BEFORE CHOICE***** */
-if (!isset($_POST["expedition"])) {
-    //$_POST["expedition"] = [];
+
+if (isset($_POST["expedition"])) {
+    $_SESSION["expedition"] = $_POST["expedition"];
+} else {
     $_POST["expedition"] = '';
 }
 
@@ -17,7 +19,7 @@ if (!isset($_POST["expedition"])) {
 if(isset($_POST["addressToShow"])) {
     $_SESSION["AddressToShip"] = $_POST["addressToShow"];
 } else {
-    $_SESSION["AddressToShip"] = '';
+    $_POST["AddressToShip"] = '';
 }
 
 
@@ -64,7 +66,7 @@ include("head.php");
                                 <div class="ref-order-line ref-customer-name"><b>Nom</b><?= $_SESSION["user"]["nom"]; ?></div>
                                 <div class="ref-order-line ref-customer-name"><b>Prenom</b><?= $_SESSION["user"]["prenom"]; ?></div>
                                 <div class="ref-order-line ref-customer-email"><b>email</b><?= $_SESSION["user"]["email"]; ?></div>
-                                <div><?php var_dump($_SESSION["user"]["id"]); ?> </div>
+                                <div><?php var_dump($_SESSION["shippingCosts"])?></div>
                             </div>
                         </div>
 
@@ -76,24 +78,24 @@ include("head.php");
                                     <span>Selectionner votre mode d'expedition :
                                         <form class="form-check" method="POST" action="validation.php">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if ($_POST["expedition"] == "Colissimo") {
+                                                <input class="form-check-input" type="radio" name="expedition" id="expChoice1" value="Colissimo" <?php if (isset($_SESSION["expedition"]) && $_SESSION["expedition"] == "Colissimo") {
                                                                                                                                                         echo "checked";
                                                                                                                                                     }; ?>>
-                                                <label class="form-check-label" for="inlineRadio1">Colissimo</label>
+                                                <label class="form-check-label" for="expChoice11">Colissimo</label>
                                             </div>
 
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if ($_POST["expedition"] == "Point Relais") {
+                                                <input class="form-check-input" type="radio" name="expedition" id="expChoice2" value="Point Relais" <?php if (isset($_SESSION["expedition"]) && $_SESSION["expedition"] == "Point Relais") {
                                                                                                                                                         echo "checked";
                                                                                                                                                     }; ?>>
-                                                <label class="form-check-label" for="inlineRadio2">Point Relais</label>
+                                                <label class="form-check-label" for="expChoice2">Point Relais</label>
                                             </div>
 
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if ($_POST["expedition"] == "Retrait Magasin") {
+                                                <input class="form-check-input" type="radio" name="expedition" id="expChoice3" value="Retrait Magasin" <?php if (isset($_SESSION["expedition"]) && $_SESSION["expedition"] == "Retrait Magasin") {
                                                                                                                                                             echo "checked";
                                                                                                                                                         }; ?>>
-                                                <label class="form-check-label" for="inlineRadio3">Retrait en magasin</label>
+                                                <label class="form-check-label" for="expChoice3">Retrait en magasin</label>
                                             </div>
 
                                             <div class="col d-flex justify-content-center">
@@ -131,14 +133,47 @@ include("head.php");
                                 <?php showArticleInCart(); ?>
                                 <hr />
                                 <div class="ref-order-line ref-line-item">Sous-Total:<span class="ref-price"><?= number_format(grandTotal(), 2, ",", " ") . " €</b>"; ?></span></div>
-                                <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?php if ($_SESSION["shippingCosts"] == '') { echo ($_SESSION["shippingCosts"]); } else { echo "Aucune selection"; } ?></span></div>
+                                <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?= $_SESSION["shippingCosts"] ?></span></div>
                                 <div class="ref-order-line ref-line-item">
-                                    <div class="ref-name">TVA</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></span>
+                                    <div class="ref-name">dont TVA</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €)"; ?></span>
                                 </div>
                                 <hr />
-                                <div class="ref-order-line ref-line-item">Total <b><span class="ref-price">$979.34</span></b></div>
+                                <div class="ref-order-line ref-line-item">
+                                    Total <b><span class="ref-price"><?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></span></b>
+                                </div>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
+
                             </div>
                         </div>
+
+      <!-- Modal Success -->
+      <div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Commande passé avec succes !</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?>.
+              Nous vous remercion de votre confiance.
+            </div>
+            <div class="modal-footer">
+              <form method="post" action="index.php">
+                <button type="submit" name="resetAll" class="btn btn-primary">retour à l'acceuil</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+---
+
+
+
+
 
 
                     </div>

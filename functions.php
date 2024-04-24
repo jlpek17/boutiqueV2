@@ -400,13 +400,16 @@ function deleteFromCart($articleToDelete)
 
 <?php
 /* This function print the button for "validation" modal only if the cart is not empty */
-function finalizeButton()
+function validateCart()
 {
 //    if (grandTotal() > 0 && $_POST["expedition"] != null) {
-    if (grandTotal() > 0) {
-?>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartValidation">Valider ma Commande</button>
-<?php
+    if (grandTotal() > 0) 
+    {
+    ?>
+    <form method="POST" action="validation.php">
+        <input type="submit" name="validCart" class="btn btn-danger" value="Valider mon panier">
+    </form>
+    <?php
     }
 }
 ?>
@@ -448,7 +451,7 @@ function quantityArticle()
 function selectExpeditionMethod()
 {
     //if ($_POST["expedition"] !== "Point Relais" && $_POST["expedition"] !== "Retrait Magasin" && $_POST["expedition"] !== "Colissimo") {
-    if ($_POST["expedition"] == null && $_SESSION["cart"] != null) {
+    if ($_SESSION ["expedition"] == '' && $_SESSION["cart"] != null) {
 ?>
 
         <form method="post">
@@ -456,7 +459,7 @@ function selectExpeditionMethod()
         </form>
     <?php
     }
-    if ($_POST["expedition"] != null) {
+    if ($_SESSION["expedition"] != null) {
     ?>
         <form method="post">
             <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="Changer">
@@ -470,8 +473,8 @@ function selectExpeditionMethod()
 <?php
 function showExpeditionMethod()
 {
-    if ($_POST["expedition"] != null) {
-        echo "(" . $_POST["expedition"] . ")";
+    if ($_SESSION["expedition"] != null) {
+        echo "(" . $_SESSION["expedition"] . ")";
     }
 }
 ?>
@@ -500,11 +503,17 @@ function emptyCartTitle()
 function payExpedition()
 {
 
-    $expeditionCost = [];
-    $shippingCosts = [];
-
-
+    $expeditionCost = '';
+    $shippingCosts = '';
+    /*
+    if (!isset($_SESSION["expedition"])) {
+        $shippingCosts = "Aucune Selection";
+    } else { 
+    */
     switch ($_POST["expedition"]) {
+
+        case "":
+            $shippingCosts = "Aucune Selection";
 
         case "Colissimo":
             $expeditionCost = quantityArticle() * 7;
@@ -522,6 +531,7 @@ function payExpedition()
             $shippingCosts = "Frais d'expedition <b>offert</b> !";
             break;
     }
+    
     $_SESSION["expeditionCost"] = $expeditionCost;
     $_SESSION["shippingCosts"] = $shippingCosts;
 }

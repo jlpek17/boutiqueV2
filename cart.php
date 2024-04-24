@@ -113,7 +113,7 @@ include("head.php");
             <!-- Button trigger modal Validation (appear if the cart is not empty) -->
 
             <div class="col d-flex justify-content-center">
-              <?= finalizeButton(); ?>
+              <?= validateCart(); ?>
             </div>
 
           </div>
