@@ -37,6 +37,7 @@ disconnection();
 
         <main>
             <h1 class="text-center">Catalogue</h1>
+            <div><?= $_POST["validationOK"]?></div>
 
             <!-- create selector to filter product by gamme -->
 

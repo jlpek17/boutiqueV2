@@ -142,14 +142,14 @@ include("head.php");
                                     Total: <b><span class="ref-price"><?= number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €"; ?></span></b>
                                 </div>
                                 <?php if(isset($_SESSION["expedition"]) && isset($_SESSION["AddressToShip"])) { ?>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
+                                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
                                 <?php 
                                 }
                                 ?>
                             </div>
                         </div>
 
-      <!-- Modal Success -->
+      <!-- Modal Validation -->
       <div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -162,8 +162,8 @@ include("head.php");
               Nous vous remercion de votre confiance.
             </div>
             <div class="modal-footer">
-              <form method="post" action="index.php">
-                <button type="submit" name="resetAll" class="btn btn-primary">retour à l'acceuil</button>
+              <form method="POST" action="index.php">
+                <button type="submit" name="validationOK" value="validationOK" class="btn btn-primary">retour à l'acceuil</button>
               </form>
             </div>
           </div>

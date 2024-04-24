@@ -176,7 +176,7 @@ function createCart()
 /* This function reset the cart after success order */
 function resetOnSuccess()
 {
-    if (isset($_POST["resetAll"])) {
+    if (isset($_POST["validationOK"])) {
         //echo isset($_POST["resetIfSuccess"]);
         $_SESSION["cart"] = [];
     }
@@ -455,7 +455,7 @@ function selectExpeditionMethod()
     if (!isset($_SESSION ["expedition"])) {
 ?>
 
-        <form method="post">
+        <form method="POST">
             <button type="submit" class="btn btn-primary">Selectionner</button>
         </form>
     <?php
@@ -464,7 +464,7 @@ function selectExpeditionMethod()
     if (isset($_SESSION["expedition"])) {
 
     ?>
-        <form method="post">
+        <form method="POST">
             <input type="submit" name="resetExpeditionMetod" class="btn btn-danger" value="Changer">
         </form>
 <?php
