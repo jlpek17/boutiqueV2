@@ -1028,10 +1028,35 @@ function recordOrder()
                 'quantite' => $cartArticle["quantity"]
             ]);
             }
+}
+?>
 
+<?php
+/* ********** this function retrieve all the order of a given users ********** */
+
+function getOrders() {
+
+    /* ***** Connection to the DB ***** */
+    $db = getConnection();
+
+    $userOrders = $db->prepare('SELECT numero, date_commande, prix FROM commandes WHERE id_client = ?');
+    $userOrders->execute([$_SESSION["user"]["id"]]); 
+    // je récupère les résultats et je les renvoie grâce à return et fetchAll(plusieurs resultats)
+    return $userOrders->fetchAll();
+}
+
+?>
+
+<?php
+function showOrders() {
+
+    
 
 
 }
+
+
+
 
 
 ?>

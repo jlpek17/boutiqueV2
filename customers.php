@@ -77,7 +77,7 @@ connexion();
                                     <div class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-3 bs-icon"><i class="fa-solid fa-clipboard-list"></i></div>
                                     <div class="px-3">
                                         <h4>Mes Commandes</h4>
-                                        <p>Verifier l'etat de mes commandes</p><a href="alterOrders.php">Voir</a>
+                                        <p>Verifier l'etat de mes commandes</p><a href="orders.php">Voir</a>
                                     </div>
                                 </div>
                             </div>
