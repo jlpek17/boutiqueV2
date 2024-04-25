@@ -1018,8 +1018,16 @@ function recordOrder()
     ]);
 
     $id = $db->lastInsertId();
-    
 
+    $contentOrder = $db->prepare("INSERT INTO commande_article (id_article, id_commande, quantite) VALUES (:idArticle, :idCommande, :quantite)");
+        foreach ($_SESSION["cart"] as $cartArticle) {
+            // echo $cartArticle["id"] .  $cartArticle["quantity"];
+            $contentOrder->execute([
+                'idArticle' => $cartArticle["id"],
+                'idCommande' => $id,
+                'quantite' => $cartArticle["quantity"]
+            ]);
+            }
 
 
 
