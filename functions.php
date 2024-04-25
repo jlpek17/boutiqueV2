@@ -67,17 +67,12 @@ function getAddresses()
 {
     // je me connecte à la base de données
     $db = getConnection();
-
     // j'exécute une requête qui va récupérer tous les adresses du user
-//      $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = $_SESSION["user"]["id"]');
-
-//  $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = ?');
-//  $addressToShip->execute($_SESSION["user"]["id"]);
-//  $addressToShip = $addressToShip->fetch();
     
-    $addressToShip = $db->query('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = 2');
-
-    // je récupère les résultats et je les renvoie grâce à return
+    
+    $addressToShip = $db->prepare('SELECT adresse, code_postal, ville FROM adresses WHERE id_client = ?');
+    $addressToShip->execute([$_SESSION["user"]["id"]]); 
+    // je récupère les résultats et je les renvoie grâce à return et fetchAll(plusieurs resultats)
     return $addressToShip->fetchAll();
 }
 
@@ -90,7 +85,7 @@ function showAddress()
             $_POST["addressToShow"] = $_SESSION["user"]["adresse"] . " " . $_SESSION["user"]["cp"] . " " . $_SESSION["user"]["ville"];
         }
         $allAddresses = getAddresses();
-        
+        var_dump($allAddresses);
         foreach ($allAddresses as $address) {
         ?>
             <option value="<?= $address["adresse"] . " " . $address["code_postal"] . " " . $address["ville"]; ?>"><?= $address["adresse"] . " " . $address["code_postal"] . " " . $address["ville"]; ?></option>
@@ -1014,12 +1009,18 @@ function recordOrder()
 /* ***** Add order references to the DB ***** */
 
     $orderToAdd = $db->prepare("INSERT INTO commandes (id_client, numero, date_commande, prix) VALUES (:idClient, :numero, :dateCommande, :prix)");
+    
     $orderToAdd->execute([
         'idClient' => strip_tags($_SESSION["user"]["id"]),
-        'numero' => strip_tags(rand(1000000, 9999999)),
-        'dateCommande' => strip_tags(date('d-m-y h:i:s')),
+        'numero' => rand(1000000, 9999999),
+        'dateCommande' => date('d-m-y h:i:s'),
         'prix' => strip_tags($_SESSION["totalOrder"])
     ]);
+
+    $id = $db->lastInsertId();
+    
+
+
 
 
 }

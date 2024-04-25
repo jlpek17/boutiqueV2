@@ -66,7 +66,7 @@ include("head.php");
                                 <div class="ref-order-line ref-customer-name"><b>Nom</b><?= $_SESSION["user"]["nom"]; ?></div>
                                 <div class="ref-order-line ref-customer-name"><b>Prenom</b><?= $_SESSION["user"]["prenom"]; ?></div>
                                 <div class="ref-order-line ref-customer-email"><b>email</b><?= $_SESSION["user"]["email"]; ?></div>
-                                <div><?php //var_dump($_SESSION["shippingCosts"])?></div>
+                                <div><?php var_dump($_SESSION["user"]["id"])?></div>
                             </div>
                         </div>
 
@@ -143,8 +143,12 @@ include("head.php");
                                 <div class="ref-order-line ref-line-item">
                                     Total: <b><span class="ref-price">
                                         <?php
-                                            $_SESSION["totalOrder"] =  number_format(grandTotal() + $_SESSION["expeditionCost"], 2, ",", " ") . " €";
-                                            echo $_SESSION["totalOrder"];
+                                            
+                                            $_SESSION["totalOrder"] =  grandTotal() + $_SESSION["expeditionCost"];
+                                            
+                                            $totalToDisplay =  number_format($_SESSION["totalOrder"], 2, ",", " ");
+                                            
+                                            echo $totalToDisplay . " €";
                                             ?>
                                             </span></b>
                                 </div>
@@ -165,7 +169,7 @@ include("head.php");
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= $_SESSION["totalOrder"] ?>.
+              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= $totalToDisplay . " €" ?>.
               Nous vous remercion de votre confiance.
             </div>
             <div class="modal-footer">

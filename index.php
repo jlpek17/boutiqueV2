@@ -37,10 +37,10 @@ disconnection();
 
         <main>
             <h1 class="text-center">Catalogue</h1>
-            <div><?= date('d-m-y h:i:s'); ?></div>
-            <div><?= $_SESSION["user"]["id"]; ?></div>
-            <div><?= $_SESSION["totalOrder"] ?></div>
-            <div><?= rand(1000000, 9999999) ?></div>
+            <div><?php echo date('d-m-y h:i:s'); ?></div>
+            <div><?php echo $_SESSION["user"]["id"]; ?></div>
+            <div><?php var_dump($_SESSION["totalOrder"]) ?></div>
+            <div><?php echo rand(1000000, 9999999) ?></div>
 
 
             <!-- create selector to filter product by gamme -->
