@@ -31,23 +31,22 @@ include("head.php");
         <main>
 
             <div class="card-body d-flex flex-column align-items-center">
-                <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4"><i class="fa-solid fa-clipboard-list"></i> Mes Commandes</div>
+                <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4"><i class="fa-solid fa-clipboard-list"></i> Détail Commandes n°</div>
 
 
                 <table class="table table-bordered table-striped-columns">
                     
                     <thead>
                         <tr>
-                            <th class="text-center" scope="col">#</th>
-                            <th class="text-end" scope="col">Date</th>
+                            <th class="text-center" scope="col">Article</th>
+                            <th class="text-end" scope="col">Prix</th>
+                            <th class="text-end" scope="col">Quantité</th>
                             <th class="text-end" scope="col">Montant</th>
-                            <th class="text-end" scope="col">Détail</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         
-                            <?php showOrders(); ?> 
                         
                     </tbody>
                 

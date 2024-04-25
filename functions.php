@@ -1047,13 +1047,39 @@ function getOrders() {
 
 ?>
 
+
 <?php
+/* ********** this function display all the order of a given user in a HTML table on orders.php ********** */
 function showOrders() {
 
-    
+$ordersToShow = getOrders(); 
 
+    foreach ($ordersToShow as $order) {
+        ?>
+            <tr>
+
+                <th scope="row"><?= $order["numero"] ?></th>
+                <td class="text-end"><?= $order["date_commande"] ?></td>
+                <td class="text-end"><?= $order["prix"] ?></td>
+                <td class="text-end"></td>
+            </tr>
+        <?php
+    }
+}
+?>
+
+<?php
+/* ********** this function display detail of a selected order in a HTML table on detailOrders.php ********** */
+
+function buttonDetailOrder() {
 
 }
+
+
+
+
+
+
 
 
 
