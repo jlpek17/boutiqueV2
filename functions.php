@@ -1039,7 +1039,7 @@ function getOrders() {
     /* ***** Connection to the DB ***** */
     $db = getConnection();
 
-    $userOrders = $db->prepare('SELECT numero, date_commande, prix FROM commandes WHERE id_client = ?');
+    $userOrders = $db->prepare('SELECT id, numero, date_commande, prix FROM commandes WHERE id_client = ?');
     $userOrders->execute([$_SESSION["user"]["id"]]); 
     // je récupère les résultats et je les renvoie grâce à return et fetchAll(plusieurs resultats)
     return $userOrders->fetchAll();
@@ -1061,8 +1061,33 @@ $ordersToShow = getOrders();
                 <th scope="row"><?= $order["numero"] ?></th>
                 <td class="text-end"><?= $order["date_commande"] ?></td>
                 <td class="text-end"><?= $order["prix"] ?></td>
-                <td class="text-end"></td>
+                <td class="text-end">
+                    <form method="POST" action="detailOrder.php" >
+
+                        <?php 
+
+                            /* ***** Connection to the DB ***** */
+                            $db = getConnection();
+
+                            $orderDetail = $db->prepare("SELECT a.nom, a.prix, d.quantite FROM articles a INNER JOIN commande_article d ON a.id = d.id_article WHERE id_commande = ?");
+                            $orderDetail->execute([$order['id']]);
+                            $orderDetail = $orderDetail->fetch();
+
+
+                        ?>git
+                        <input type="hidden" name="orderID" value="<?= $order['id'] ?>">
+                        <input type="hidden" name="orderNumber" value="<?= $order['numero'] ?>">
+                        <input type="hidden" name="orderDate" value="<?= $order['date_commande'] ?>">
+                        <input type="hidden" name="orderTotal" value="<?= $order['prix'] ?>">
+                        <input type="hidden" name="orderQuantity" value="<?= $orderDetail['quantite'] ?>">
+                        <input type="hidden" name="orderArticlePrice" value="<?= $orderDetail['prix'] ?>">
+                        <input type="hidden" name="orderArticleName" value="<?= $orderDetail['nom'] ?>">
+
+                        <button class="btn btn-primary" type="submit">Voir</button>
+                    </form>
+                </td>
             </tr>
+            
         <?php
     }
 }
@@ -1071,7 +1096,10 @@ $ordersToShow = getOrders();
 <?php
 /* ********** this function display detail of a selected order in a HTML table on detailOrders.php ********** */
 
-function buttonDetailOrder() {
+function buttonDetailOrder($orderId, $orderNumber, $orderDate, $orderPrice) {
+    
+    echo $orderId . " ET " . $orderNumber . " ET " . $orderDate . " ET " . $orderPrice;
+    
 
 }
 

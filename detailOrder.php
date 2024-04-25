@@ -46,8 +46,8 @@ include("head.php");
                     </thead>
 
                     <tbody>
-                        
-                        
+
+                                            
                     </tbody>
                 
                 </table>
