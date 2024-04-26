@@ -1,57 +1,79 @@
 <?php
-session_start();
+/* ***** make available the functions from the file ***** */
 include("functions.php");
+
+/* ***** create the session (cookie and varable) ***** */
+session_start();
+
+
 ?>
 
+<!-- START HTML -->
 <!DOCTYPE html>
 <html lang="fr">
 
+
 <?php
+/* ***** fetch the <head> part of the page (meta / title / link / ...) ***** */
 include("head.php");
 ?>
 
 <body>
-<div class="container-fluid" id="wrapper">
-  <?php
-  include("header.php");
 
- /* look for action for reset*/ 
- if(array_key_exists('added_article_id', $_POST)) { 
-  resetCart(); 
-} 
+  <!-- wrapper to limit the wide of the webpage to px (check on css)-->
+  <div class="container-fluid" id="wrapper">
 
+    <?php
+    /* ***** fetch the <header> part of the page (navbar / ...) ***** */
+    include("header.php");
+    ?>
 
-  $clicked_article_id = $_POST["id_article"];
-  $article = getArticleFromId($clicked_article_id);
-  ?>
-  <main>
+    <main>
 
-    <div class="row justify-content-center">
-      <div class="col-md-6 d-flex justify-content-center">
+      <?php
+      $clicked_article_id = $_POST["id_article"];
+      $article = getArticleFromId($clicked_article_id);
+      ?>
 
-      <div class="card text-center" style="width: 36rem;">
-        <div class="card-header">
-          En détail
+      <div class="row justify-content-center">
+        <div class="col-md-6 d-flex justify-content-center">
+
+          <div class="card text-center" style="width: 36rem;">
+            <div class="card-header">
+              En détail
+            </div>
+            <div class="card-body"> <!-- Display "Zoom" on a selected article -->
+
+              <img src="<?= $article["image"]; ?>" class="card-img" alt="...">
+              <h5 class="card-title"><?= $article["nom"]; ?></h5>
+              <p class="card-text"><b><?= $article["description"]; ?></b></p>
+              <p class="card-text"><?= $article["description_detaillee"]; ?></p>
+
+              <!-- "BUTTON": Quantity (3 colors)-->
+              <?php
+                echo displayQuantity($article["id"]);
+              ?>
+
+              <!-- BUTTON: ADD -->
+              <?php
+              showAddButton($article["id"])
+              ?>
+
+            </div>
+            <div class="card-footer text-body-secondary"></div>
+          </div>
         </div>
-        <div class="card-body">
-          <img src="<?=$article["img"];?>" class="card-img" alt="...">
-          <h5 class="card-title"><?=$article["name"];?></h5>
-          <p class="card-text"><b><?=$article["title"];?></b></p>
-          <p class="card-text"><?=$article["detail"];?></p>
-          <form method="POST" action="cart.php">
-            <input type="hidden" name="added_article_id" value="<?=$article["id"];?>">
-            <button class="btn btn-primary" type="submit">Ajouter et voir mon panier</button>
-          </form>
-        </div>
-        <div class="card-footer text-body-secondary"></div>
-      </div>
+
       </div>
 
-</div>
+      </main>
 
-  </main>
+</div> <!-- close the wrapper -->
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</div>
+<?php
+/* ***** fetch the <header> part of the page (navbar / ...) ***** */
+include("footer.php");
+?>
 </body>
+
 </html>

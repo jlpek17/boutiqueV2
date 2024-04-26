@@ -152,10 +152,10 @@ function showArticles($articles)
                             <input type="hidden" name="id_article" value="<?= $result["id"] ?>">
                             <button type="submit" class="btn btn-light"><i id="glassIco" class="fa-solid fa-magnifying-glass-plus"></i></button>
                         </form>
-                        <form method="POST" action="cart.php">
-                            <input type="hidden" name="added_article_id" value="<?= $result["id"] ?>">
-                            <button type="submit" class="btn btn-primary"><a class="btn btn-primary">Ajouter au panier</a></button>
-                        </form>
+                        <?php showAddButton($result["id"]); ?>
+
+
+
                     </div>
                 </div>
             </div>
@@ -219,13 +219,18 @@ function addToCart($article)
         if ($_SESSION["cart"][$i]["id"] == $article["id"]) {
 
             $_SESSION["cart"][$i]["quantity"] += 1;
+
             return;
         }
     }
-    $article["quantity"] = 0;
-    $article["quantity"] += 1;
-    array_push($_SESSION["cart"], $article);
-}
+
+        $article["quantity"] = 0;
+        $article["quantity"] += 1;
+        array_push($_SESSION["cart"], $article);
+        ?>
+        window.alert("pas assez de stock");
+        <?php
+    }
 ?>
 
 
@@ -358,14 +363,20 @@ function grandTotal()
 /* Add one to the article in cart */
 function plusOneInCart($articleToIncrease)
 {
+    $stock = getStock($articleToIncrease);
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
 
-        if ($_SESSION["cart"][$i]["id"] == $articleToIncrease) {;
-            $_SESSION["cart"][$i]["quantity"] += 1;
-            //$_POST["plusOne"] = [];
+        if ($_SESSION["cart"][$i]["id"] == $articleToIncrease) {
+            if ($_SESSION["cart"][$i]["quantity"] + 1 <= $stock) {
+                $_SESSION["cart"][$i]["quantity"] += 1;
             return;
-        }
+            } else {
+                
+            echo "<script> alert(\"quantite indispo\");</script>";
+
+            }
     }
+}
 }
 ?>
 
@@ -377,7 +388,6 @@ function minusOneInCart($articleToDecrease)
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
         if ($_SESSION["cart"][$i]["id"] == $articleToDecrease) {
             $_SESSION["cart"][$i]["quantity"] -= 1;
-            //$_POST["minusOne"] = [];
             return;
         }
     }
@@ -1057,7 +1067,6 @@ $ordersToShow = getOrders();
     foreach ($ordersToShow as $order) {
         ?>
             <tr>
-
                 <th scope="row"><?= $order["numero"] ?></th>
                 <td class="text-end"><?= $order["date_commande"] ?></td>
                 <td class="text-end"><?= $order["prix"] ?></td>
@@ -1094,7 +1103,7 @@ $ordersToShow = getOrders();
 <?php
 /* ********** this function display detail of a selected order in a HTML table on detailOrders.php ********** */
 
-function completeDetailOrder($orderId) {
+function getDetailOrder($orderId) {
 
 
     /* ***** Connection to the DB ***** */
@@ -1102,10 +1111,89 @@ function completeDetailOrder($orderId) {
 
     $orderDetail = $db->prepare("SELECT a.nom, a.prix, d.quantite FROM articles a INNER JOIN commande_article d ON a.id = d.id_article WHERE id_commande = ?");
     $orderDetail->execute([$orderId]);
-    return $orderDetail->fetch();
+    return $orderDetail->fetchAll();
+}
+?>
+
+<?php
+/* ********** this function display one of three button on product page in order to show quantity of the selected article ********** */
+ 
+function displayQuantity($articleId) {
+
+    /* ***** Connection to the DB ***** */
+    $db = getConnection();
+
+
+    $quantityArticle = $db->query("SELECT stock FROM articles WHERE id = $articleId");
+    $quantityArticle = $quantityArticle->fetch();
+    //var_dump($quantityArticle);
+
+    $stock = $quantityArticle["stock"];
+
+    switch (true) {
+
+        case ($stock >= 10):
+            var_dump(($stock))
+            ?>
+                <button class="btn btn-success rounded-pill px-3" type="button">En stock</button> <!-- green -->
+            <?php
+            break;
+
+        case ($stock >= 1 && $stock < 10 ):
+            ?>
+                <button class="btn btn-warning rounded-pill px-3" type="button">Plus que <?= $stock ?> restantes</button> <!-- yellow -->
+            <?php
+            break;
+
+        default:
+            ?>
+                <button class="btn btn-danger rounded-pill px-3" type="button">Article épuisé</button> <!-- red -->
+            <?php
+            break;
+    }
+}
+?>
+
+<?php
+/* ********** this function hide the add button when the quantity is equal to 0 ********** */
+function showAddButton($articleId) {
+
+    /* ***** Connection to the DB ***** */
+    $db = getConnection();
+
+    $quantityArticle = $db->query("SELECT stock FROM articles WHERE id = $articleId");
+    $quantityArticle = $quantityArticle->fetch();
+
+
+    if ($quantityArticle["stock"] != 0) {
+    ?>
+        <form method="POST" action="cart.php">
+            <input type="hidden" name="added_article_id" value="<?= $articleId; ?>">
+            <button class="btn btn-primary rounded-pill px-3" type="submit">Ajouter et voir mon panier</button>
+        </form>
+    <?php
+    }
+}
+?>
+
+<?php
+/* ********** this function check the article quantity in avoid to order out of stock artile ********** */
+function getStock($articleId) {
+
+        /* ***** Connection to the DB ***** */
+        $db = getConnection();
+
+
+        $quantityArticle = $db->prepare("SELECT stock FROM articles WHERE id = ?");
+        $quantityArticle->execute([$articleId]);
+        $resultat = $quantityArticle->fetch();
+        return $resultat["stock"];
+        //var_dump($quantityArticle);
+
+
+
 
 }
-
 
 
     
