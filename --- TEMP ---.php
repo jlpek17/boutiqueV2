@@ -26,3 +26,8 @@ function buttonDetailOrder($orderId, $orderNumber, $orderDate, $orderPrice) {
                 "OrderPrice" => $orderPrice
             ];
 }
+
+
+<input type="hidden" name="orderQuantity" value="<?= $orderDetail['quantite'] ?>">
+                        <input type="hidden" name="orderArticlePrice" value="<?= $orderDetail['prix'] ?>">
+                        <input type="hidden" name="orderArticleName" value="<?= $orderDetail['nom'] ?>">

@@ -51,7 +51,9 @@ include("head.php");
                     </tbody>
                 
                 </table>
-            
+            <div>       
+
+                <?php             var_dump(completeDetailOrder($_POST["orderId"])); ?></div>
             </div>
 
 

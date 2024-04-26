@@ -1074,14 +1074,12 @@ $ordersToShow = getOrders();
                             $orderDetail = $orderDetail->fetch();
 
 
-                        ?>git
-                        <input type="hidden" name="orderID" value="<?= $order['id'] ?>">
+                        ?>
+
+                        <input type="hidden" name="orderId" value="<?= $order['id'] ?>">
                         <input type="hidden" name="orderNumber" value="<?= $order['numero'] ?>">
                         <input type="hidden" name="orderDate" value="<?= $order['date_commande'] ?>">
                         <input type="hidden" name="orderTotal" value="<?= $order['prix'] ?>">
-                        <input type="hidden" name="orderQuantity" value="<?= $orderDetail['quantite'] ?>">
-                        <input type="hidden" name="orderArticlePrice" value="<?= $orderDetail['prix'] ?>">
-                        <input type="hidden" name="orderArticleName" value="<?= $orderDetail['nom'] ?>">
 
                         <button class="btn btn-primary" type="submit">Voir</button>
                     </form>
@@ -1096,21 +1094,33 @@ $ordersToShow = getOrders();
 <?php
 /* ********** this function display detail of a selected order in a HTML table on detailOrders.php ********** */
 
-function buttonDetailOrder($orderId, $orderNumber, $orderDate, $orderPrice) {
-    
-    echo $orderId . " ET " . $orderNumber . " ET " . $orderDate . " ET " . $orderPrice;
-    
+function completeDetailOrder($orderId) {
+
+
+    /* ***** Connection to the DB ***** */
+    $db = getConnection();
+
+    $orderDetail = $db->prepare("SELECT a.nom, a.prix, d.quantite FROM articles a INNER JOIN commande_article d ON a.id = d.id_article WHERE id_commande = ?");
+    $orderDetail->execute([$orderId]);
+    return $orderDetail->fetch();
 
 }
 
 
 
+    
+    
 
+    /*
+SELECT a.nom, a.prix, d.quantite, c.*
+FROM articles a 
 
+INNER JOIN commande_article d 
+ON a.id = d.id_article 
 
+INNER JOIN commandes c
+ON c.id = d.id_commande
 
-
-
-
-
-?>
+WHERE id_commande = 9
+    */
+    ?>
