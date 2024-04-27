@@ -1027,17 +1027,27 @@ function recordOrder()
         'prix' => strip_tags($_SESSION["totalOrder"])
     ]);
 
-    $id = $db->lastInsertId();
+    $id = $db->lastInsertId(); // get the id of the command which was just insertin the db
+    
 
     $contentOrder = $db->prepare("INSERT INTO commande_article (id_article, id_commande, quantite) VALUES (:idArticle, :idCommande, :quantite)");
+    $updateStock = $db->prepare("UPDATE articles SET stock = :stock WHERE id = :idArticle");
+
         foreach ($_SESSION["cart"] as $cartArticle) {
-            // echo $cartArticle["id"] .  $cartArticle["quantity"];
             $contentOrder->execute([
                 'idArticle' => $cartArticle["id"],
                 'idCommande' => $id,
                 'quantite' => $cartArticle["quantity"]
             ]);
-            }
+
+
+            $updatedStockArticle = getStock($cartArticle["id"]) - $cartArticle["quantity"] ; // get the quantity of the article
+            $updateStock->execute([
+                'stock' => $updatedStockArticle,
+                'idArticle' => $cartArticle["id"]
+            //var_dump($updatedStockArticle); die;
+            ]);
+        }
 }
 ?>
 
