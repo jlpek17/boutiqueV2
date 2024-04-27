@@ -130,16 +130,18 @@ function filterArticles()
         return $articlesToDisplay;
     }
 }
+?>
 
-
-
+<?php
 /* ***** This function print ALL the get articles on index.php page ***** */
 function showArticles($articles)
 {
 
     foreach ($articles as $result) {
     ?>
-        <div class="col-md-4 d-flex justify-content-center">
+    <!-- -->
+
+        <div class="col-md-4 gy-5 d-flex justify-content-center">
             <div class="card" style="width: 20rem; height: 42rem;">
                 <img src=<?= $result["image"]; ?> class="card-img-top" alt="...">
                 <div class="card-body">
@@ -153,17 +155,19 @@ function showArticles($articles)
                             <button type="submit" class="btn btn-light"><i id="glassIco" class="fa-solid fa-magnifying-glass-plus"></i></button>
                         </form>
                         <?php showAddButton($result["id"]); ?>
-
-
-
                     </div>
                 </div>
             </div>
         </div>
-<?php
+
+    <!-- -->
+    <?php
     }
 }
 
+?>
+
+<?php
 /* This function create the cart if it is not create */
 function createCart()
 {

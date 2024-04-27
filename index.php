@@ -37,8 +37,6 @@ disconnection();
 
         <main>
             <h1 class="text-center">Catalogue</h1>
-            <div><?php //echo date('d-m-y h:i:s'); ?></div>
-
 
             <!-- create selector to filter product by gamme -->
 
@@ -53,13 +51,17 @@ disconnection();
                     </select>
                     <input type="submit" value="appliquer">
                 </form>
+            <!-- end selector ... -->
 
+            <!-- display the selected article -->
 
-            <div class="row">
-                <?php
-                    showArticles(filterArticles());
-                ?>
-            </div>
+                <div class="row">
+                    <?php
+                        showArticles(filterArticles());
+                    ?>
+                </div>
+            <!-- end display ... -->
+
 
         </main>
 
