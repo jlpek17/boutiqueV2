@@ -8,6 +8,12 @@ session_start();
 /* ***** LOGIC ***** */
 
 /* ***** initialize variable of expedition choice BEFORE CHOICE***** */
+if (empty($_SESSION["user"])) {
+    header("Location: connexion.php");
+}
+
+
+/* ***** initialize variable of expedition choice BEFORE CHOICE***** */
 
 if (isset($_POST["expedition"])) {
     $_SESSION["expedition"] = $_POST["expedition"];
@@ -16,11 +22,33 @@ if (isset($_POST["expedition"])) {
 }
 
 /* ***** keep the variable of the address to ship in $_SESSION ***** */
-if(isset($_POST["addressToShow"])) {
+if (isset($_POST["addressToShow"])) {
     $_SESSION["AddressToShip"] = $_POST["addressToShow"];
 } else {
     $_POST["AddressToShip"] = '';
 }
+
+/* check for action for INCREASE quantity */
+if (array_key_exists('plusOne', $_POST)) {
+    plusOneInCart($_POST["plusOne"]);
+}
+
+
+/* check for action for DECREASE quantity */
+if (array_key_exists('minusOneId', $_POST)) {
+
+    if ($_POST["minusOneQuantity"] >= 2) {
+        minusOneInCart($_POST["minusOneId"]);
+    } else {
+        echo "<script>alert('quantité minimum atteinte')</script>";
+    }
+}
+
+/* check for action for DELETE article from cart */
+if (array_key_exists('deleteArticle', $_POST)) {
+    deleteFromCart($_POST["deleteArticle"]);
+}
+
 
 
 ?>
@@ -50,15 +78,6 @@ include("head.php");
                 <div data-reflow-type="order-status">
                     <div class="reflow-order-status">
 
-                        <!---------- CADRE COMMANDES TO MOVE 
-                        <div class="col">
-                            <div class="ref-order-info">
-                                <h2>Order #2050714543</h2>
-                                <div class="ref-order-line ref-status"><b>Status</b>returned</div>
-                                <div class="ref-order-line ref-created"><b>Created</b>10/31/2023, 2:34:02 PM</div>
-                            </div>
-                        </div>---------->
-
                         <!---------- CADRE COORDONNEES ---------->
                         <div class="col-md-5">
                             <div class="ref-order-customer">
@@ -66,7 +85,6 @@ include("head.php");
                                 <div class="ref-order-line ref-customer-name"><b>Nom</b><?= $_SESSION["user"]["nom"]; ?></div>
                                 <div class="ref-order-line ref-customer-name"><b>Prenom</b><?= $_SESSION["user"]["prenom"]; ?></div>
                                 <div class="ref-order-line ref-customer-email"><b>email</b><?= $_SESSION["user"]["email"]; ?></div>
-                                <div><?php var_dump($_SESSION["user"]["id"])?></div>
                             </div>
                         </div>
 
@@ -98,9 +116,9 @@ include("head.php");
                                                 <label class="form-check-label" for="expChoice3">Retrait en magasin</label>
                                             </div>
 
-                                            <div class="col d-flex justify-content-center">
+                                            <div class="col d-flex justify-content-end">
                                                 <?php
-                                                    selectExpeditionMethod();
+                                                selectExpeditionMethod();
                                                 ?>
                                             </div>
                                         </form>
@@ -109,90 +127,95 @@ include("head.php");
 
 
 
-
+                                <hr />
                                 <div class="ref-order-line ref-shipping-address"><b>Adresse de livraison</b>
 
-                                <!-- button selection for multiple address-->
-                                <form method="POST" action="validation.php">
-                                    <select class="form-select" id="addressToShow" name="addressToShow">
-                                        <option>Choississez une adresse :</option>
+                                    <!-- Dropdown Button selector for multiple address-->
 
-                                        <?php                        
+                                    <form method="POST" action="validation.php">
+                                        <select id="addressToShow" name="addressToShow">
+
+                                            <option>Choississez une adresse :</option>
+                                            <?php
                                             showAddress(); // this call function which create the HTML <option> element for the address selection
-                                        ?>
-                                    </select>
-                                    <input type="submit" value="appliquer">
-                                </form>
-                                <span>Adresse sellectionnée : <?php if (!isset($_SESSION["AddressToShip"])) { echo " Aucune selection"; } else { echo $_SESSION["AddressToShip"]; } ?></span>
-                            
-                            </div>
-                        </div>
-
-                        <!---------- RAPPEL DE LA COMMANDE ---------->
-                        <div class="col">
-                            <div class="ref-line-items">
-                                <h2>Rappel de la commande</h2>
-                                <?php showArticleInCart(); ?>
-                                <hr />
-                                <div class="ref-order-line ref-line-item">Sous-Total:<span class="ref-price"><?= number_format(grandTotal(), 2, ",", " ") . " €</b>"; ?></span></div>
-                                <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?= $_SESSION["shippingCosts"] ?></span></div>
-                                <div class="ref-order-line ref-line-item">
-                                    <div class="ref-name">dont TVA:</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €"; ?></span>
-                                </div>
-                                <hr />
-                                <div class="ref-order-line ref-line-item">
-                                    Total: <b><span class="ref-price">
-                                        <?php
-                                            
-                                            $_SESSION["totalOrder"] =  grandTotal() + $_SESSION["expeditionCost"];
-                                            
-                                            $totalToDisplay =  number_format($_SESSION["totalOrder"], 2, ",", " ");
-                                            
-                                            echo $totalToDisplay . " €";
                                             ?>
-                                            </span></b>
+
+                                        </select>
+
+                                        <div class="col d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary">Selectionner</button>
+                                        </div>
+
+                                    </form>
+
+                                    <span><b>Adresse sellectionnée : <?php if (!isset($_SESSION["AddressToShip"])) {
+                                                                        echo " Aucune selection";
+                                                                    } else {
+                                                                        echo $_SESSION["AddressToShip"];
+                                                                    } ?></b></span>
+
                                 </div>
-                                <?php if(isset($_SESSION["expedition"]) && isset($_SESSION["AddressToShip"])) { ?>
-                                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
-                                <?php 
-                                }
-                                ?>
                             </div>
+
+                            <!---------- RAPPEL DE LA COMMANDE ---------->
+                            <hr />
+                            <div class="col">
+                                <div class="ref-line-items">
+                                    <h2 id="AddMinusDeleteArticle">Rappel de la commande</h2>
+
+                                    <?php showArticleInCart(); ?>
+                                    <hr />
+                                    <div class="ref-order-line ref-line-item">Sous-Total:<span class="ref-price"><?= number_format(grandTotal(), 2, ",", " ") . " €</b>"; ?></span></div>
+                                    <div class="ref-order-line ref-line-item">Expedition:<span class="ref-price"><?= $_SESSION["shippingCosts"] ?></span></div>
+                                    <div class="ref-order-line ref-line-item">
+                                        <div class="ref-name">dont TVA:</div><span class="ref-price"><?= number_format(((grandTotal() / 120) * 20), 2, ",", " ") . " €"; ?></span>
+                                    </div>
+                                    <hr />
+                                    <div class="ref-order-line ref-line-item">
+                                        Total: <b><span class="ref-price">
+                                                <?php
+
+                                                $_SESSION["totalOrder"] =  grandTotal() + $_SESSION["expeditionCost"];
+
+                                                $totalToDisplay =  number_format($_SESSION["totalOrder"], 2, ",", " ");
+
+                                                echo $totalToDisplay . " €";
+                                                ?>
+                                            </span></b>
+                                    </div>
+                                    <?php if (isset($_SESSION["expedition"]) && isset($_SESSION["AddressToShip"])) { ?>
+                                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#success">Valider la commande !</button>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
+                            <!-- Modal Validation -->
+                            <div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Commande passé avec succes !</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Felicitation ! Nous avons bien recu votre commande d'un montant de <?= $totalToDisplay . " €" ?>.
+                                            Nous vous remercion de votre confiance.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="POST" action="index.php">
+                                                <button type="submit" name="validationOK" value="validationOK" class="btn btn-primary">retour à l'acceuil</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
-
-      <!-- Modal Validation -->
-      <div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Commande passé avec succes !</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Felicitation ! Nous avons bien recu votre commande d'un montant de <?= $totalToDisplay . " €" ?>.
-              Nous vous remercion de votre confiance.
-            </div>
-            <div class="modal-footer">
-              <form method="POST" action="index.php">
-                <button type="submit" name="validationOK" value="validationOK" class="btn btn-primary">retour à l'acceuil</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
----
-
-
-
-
-
-
                     </div>
                 </div>
-            </div>
 
         </main>
     </div> <!-- close the wrapper -->

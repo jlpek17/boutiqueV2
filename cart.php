@@ -93,7 +93,7 @@ include("head.php");
           showArticleInCart();
           ?>
           <div class="row d-flex align-items-center">
-            <div class="col d-flex justify-content-center">
+            <div id="AddMinusDeleteArticle" class="col d-flex justify-content-center">
               <?= ResetButton(); ?>
             </div>
           </div>
@@ -111,6 +111,8 @@ include("head.php");
             <p class="card-title"> Frais d'expédition: <?php // showExpeditionMethod(); ?> Calculé à l'etape suivante </p>
 
             <!-- Button trigger modal Validation (appear if the cart is not empty) -->
+
+            <div class="ref-tiny-separator text-center">∙∙∙∙∙</div>
 
             <div class="col d-flex justify-content-center">
               <?= validateCart(); ?>

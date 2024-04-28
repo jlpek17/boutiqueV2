@@ -281,27 +281,31 @@ function showArticleInCart()
             <div class="col-md-1">
                 <?= " x " . $cartArticle["quantity"]; ?>
             </div>
+            <!-- "+" Article Icon -->
             <div class="col-md-1">
-                <form method="post" action="cart.php">
+                <form method="POST" action="#AddMinusDeleteArticle">
                     <button type="submit" name="plusOne" value="<?= $cartArticle["id"]; ?>"><i class="bi bi-plus-circle-fill"></i></button>
                 </form>
-                <form method="post" action="cart.php">
+            <!-- "-" Article Icon -->
+                <form method="POST" action="#AddMinusDeleteArticle">
                     <input type="hidden" name="minusOneId" value="<?= $cartArticle["id"]; ?>">
                     <input type="hidden" name="minusOneQuantity" value="<?= $cartArticle["quantity"]; ?>">
                     <button type="submit"><i class="bi bi-dash-circle"></i></button>
                 </form>
             </div>
+            
             <div class="col-md-2">
                 <?= $cartArticle["prix"] * $cartArticle["quantity"] . " €"; ?>
             </div>
+            <!-- trash Article Icon -->
             <div class="col-md-1">
-                <form method="post" action="cart.php">
+                <form method="POST" action="#AddMinusDeleteArticle">
                     <input type="hidden" name="deleteArticle" value="<?= $cartArticle["id"]; ?>">
                     <button type="submit"><i class="bi bi-trash3-fill"></i></button>
                 </form>
             </div>
         </div>
-        <div class="ref-tiny-separator">∙∙∙∙∙</div>
+        <div class="ref-tiny-separator text-center">∙∙∙∙∙</div>
 
 <?php
 
@@ -430,6 +434,7 @@ function validateCart()
     ?>
     <form method="POST" action="validation.php">
         <input type="submit" name="validCart" class="btn btn-danger" value="Valider mon panier">
+        <div class="ref-tiny-separator text-center">∙∙∙∙∙</div>
     </form>
     <?php
     }
@@ -444,7 +449,8 @@ function ResetButton()
     if (grandTotal() > 0) {
 ?>
         <form method="POST">
-            <input type="submit" name="resetCart" class="btn btn-danger" value="Vider mon Panier">
+            <input type="submit" name="resetCart" class="btn btn-warning" value="Vider mon Panier">
+            <div class="ref-tiny-separator text-center">∙∙∙∙∙</div>
         </form>
 <?php
     }
@@ -478,6 +484,7 @@ function selectExpeditionMethod()
         <form method="POST">
             <button type="submit" class="btn btn-primary">Selectionner</button>
         </form>
+        
     <?php
     }
 
