@@ -41,16 +41,21 @@ disconnection();
             <!-- create selector to filter product by gamme -->
 
                 <form method="POST" action="index.php">
-                    <select class="form-select" id="gamme" name="gamme">
+                  
+                        <select id="gamme" name="gamme">
 
-                        <option>Filtrer:</option>
-                        <option value="all">Tout</option>
-                        <?php                        
-                        showGamme(); // this call function which create the HTML <option> element from the gamme in BD
-                        ?>
-                    </select>
-                    <input type="submit" value="appliquer">
+                            <option value="all">Tout</option>
+                            <!-- // this call function which create the HTML <option> element from the gamme in BD -->
+                            <?= showGamme() ?>
+
+                        </select>
+                   
+                        <button class="btn btn-primary" type="submit">Filtrer</button>
+                 
                 </form>
+
+
+
             <!-- end selector ... -->
 
             <!-- display the selected article -->

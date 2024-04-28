@@ -17,25 +17,25 @@ if (isset($_POST["registeredLastName"])) {
 <html lang="fr">
 
 
-    <?php
-    /* ***** fetch the <head> part of the page (meta / title / link / ...) ***** */
-    include("head.php");
-    ?>
+<?php
+/* ***** fetch the <head> part of the page (meta / title / link / ...) ***** */
+include("head.php");
+?>
 
 <body>
 
-     <!-- wrapper to limit the wide of the webpage to px (check on css)-->
-     <div class="container-fluid" id="wrapper">
+    <!-- wrapper to limit the wide of the webpage to px (check on css)-->
+    <div class="container-fluid" id="wrapper">
 
         <?php
         /* ***** fetch the <header> part of the page (navbar / ...) ***** */
         include("header.php");
         ?>
 
-<main>
+        <main>
 
             <h1>Connectez-vous avec vos identifiants :</h1>
-            <a href="index.php">retour à l'accueil</a>
+
 
             <div class="container">
                 <div class="col-md-6">
@@ -54,14 +54,15 @@ if (isset($_POST["registeredLastName"])) {
                     </form>
                 </div>
             </div>
-            </main>
+        </main>
 
-</div> <!-- close the wrapper -->
+    </div> <!-- close the wrapper -->
 
 
-<?php
-/* ***** fetch the <header> part of the page (navbar / ...) ***** */
+    <?php
+    /* ***** fetch the <header> part of the page (navbar / ...) ***** */
     include("footer.php");
-?>
+    ?>
 </body>
+
 </html>
