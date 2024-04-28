@@ -141,21 +141,27 @@ function showArticles($articles)
     ?>
     <!-- -->
 
-        <div class="col-md-4 gy-5 d-flex justify-content-center">
-            <div class="card" style="width: 20rem; height: 42rem;">
+        <div class="col-md-4 gy-4 d-flex justify-content-center">
+            <div class="card" style="width: 20rem; height: 40rem;">
                 <img src=<?= $result["image"]; ?> class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title"><?= $result["nom"]; ?></h5>
                     <p class="card-text"><b><?= $result["description"] . "\n"; ?></b></p>
                     <p class="card-text"><?= $result["description_detaillee"] . "\n"; ?></p>
                     <p class="card-text"><b><?= $result["prix"] . " €"; ?></b></p>
-                    <div class="d-flex flex-row justify-content-around">
+
+                    <!-- Detail Article Button -->                    
+                    <div class="d-flex flex-row justify-content-center">
                         <form method="POST" action="product.php">
                             <input type="hidden" name="id_article" value="<?= $result["id"] ?>">
                             <button type="submit" class="btn btn-light"><i id="glassIco" class="fa-solid fa-magnifying-glass-plus"></i></button>
                         </form>
+                    </div>
+                    <!-- Add Article Button -->
+                    <div class="d-flex flex-row justify-content-center">
                         <?php showAddButton($result["id"]); ?>
                     </div>
+
                 </div>
             </div>
         </div>

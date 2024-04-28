@@ -11,9 +11,9 @@
     </a>
 
     <ul class="nav col-md-4 justify-content-end">
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Panier</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Mon Compte</a></li>
+      <li class="nav-item"><a href="index.php" class="nav-link px-2 text-body-secondary">Home</a></li>
+      <li class="nav-item"><a href="cart.php" class="nav-link px-2 text-body-secondary">Panier</a></li>
+      <li class="nav-item"><a href="customers.php" class="nav-link px-2 text-body-secondary">Mon Compte</a></li>
     </ul>
   </footer>
 </div>
