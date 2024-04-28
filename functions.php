@@ -142,7 +142,7 @@ function showArticles($articles)
     <!-- -->
 
         <div class="col-md-4 gy-4 d-flex justify-content-center">
-            <div class="card" style="width: 20rem; height: 40rem;">
+            <div class="card" style="width: 20rem; height: 42rem;">
                 <img src=<?= $result["image"]; ?> class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title"><?= $result["nom"]; ?></h5>
@@ -484,7 +484,7 @@ function selectExpeditionMethod()
         <form method="POST">
             <button type="submit" class="btn btn-primary">Selectionner</button>
         </form>
-        
+
     <?php
     }
 
@@ -817,12 +817,15 @@ function conditionalNavbar()
     } else {
     ?>
         <li class="nav-item">
-            <a class="nav-link" href="customers.php"><i class="fa-regular fa-user"></i>Mon compte</a>
+            <a class="nav-link" href="customers.php"><i class="fa-regular fa-user"></i>&nbspCompte</a>
         </li>
+
         <li class="nav-item">
-            <form method="POST" action="index.php">
-                <button type="submit" name="deconnexion"><i class="fa-solid fa-user-slash"></i></button>
-            </form>
+            <a class="nav-link">
+                <form method="POST" action="index.php">
+                    <button type="submit" name="deconnexion" class="btn btn-default"><i class="fa-solid fa-user-large-slash"></i></button>
+                </form>
+            </a>
         </li>
     <?php
     }

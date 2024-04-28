@@ -16,8 +16,9 @@ createCart()
             <a class="nav-link active" aria-current="page" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="cart.php">Panier<?= "(" . quantityArticle() . ")"; ?></a>
+            <a class="nav-link" href="cart.php">Panier&nbsp<span class="badge rounded-pill text-bg-dark"><?= quantityArticle() ?></span></a>
           </li>
+          
           <?php
           conditionalNavbar();
           ?>
