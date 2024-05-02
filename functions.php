@@ -85,7 +85,6 @@ function showAddress()
             $_POST["addressToShow"] = $_SESSION["user"]["adresse"] . " " . $_SESSION["user"]["cp"] . " " . $_SESSION["user"]["ville"];
         }
         $allAddresses = getAddresses();
-        var_dump($allAddresses);
         foreach ($allAddresses as $address) {
         ?>
             <option value="<?= $address["adresse"] . " " . $address["code_postal"] . " " . $address["ville"]; ?>"><?= $address["adresse"] . " " . $address["code_postal"] . " " . $address["ville"]; ?></option>
@@ -669,7 +668,7 @@ function checkEmptyField()
             return true;
         }
     }
-    echo "tous les champs sont remplis";
+
     return false;
 }
 
@@ -764,8 +763,11 @@ function connexion()
 
         /* ***** si la variable est vide la client n'espt pas inscrit ***** */
         if (empty($checkCustomer)) {
-            echo "client non inscrit";
-
+            ?>
+            <script>
+            alert("client non inscrit");
+            </script>
+            <?php
 
             /* ***** sinon je recupere toutes ses données dans $_SESSION ***** */
         } else {
@@ -937,7 +939,6 @@ function updateAdress()
             'id' => $_SESSION["user"]['id']
         ]);
 
-        var_dump($adressToModify);
 
         $_SESSION["user"]['adresse'] = $newAdress;
         $_SESSION["user"]['cp'] = $newCp;
@@ -1065,7 +1066,6 @@ function recordOrder()
             $updateStock->execute([
                 'stock' => $updatedStockArticle,
                 'idArticle' => $cartArticle["id"]
-            //var_dump($updatedStockArticle); die;
             ]);
         }
 }
@@ -1156,14 +1156,12 @@ function displayQuantity($articleId) {
 
     $quantityArticle = $db->query("SELECT stock FROM articles WHERE id = $articleId");
     $quantityArticle = $quantityArticle->fetch();
-    //var_dump($quantityArticle);
 
     $stock = $quantityArticle["stock"];
 
     switch (true) {
 
         case ($stock >= 10):
-            var_dump(($stock))
             ?>
                 <button class="btn btn-success rounded-pill px-3" type="button">En stock</button> <!-- green -->
             <?php
@@ -1183,6 +1181,7 @@ function displayQuantity($articleId) {
     }
 }
 ?>
+
 
 <?php
 /* ********** this function hide the add button when the quantity is equal to 0 ********** */
@@ -1218,7 +1217,6 @@ function getStock($articleId) {
         $quantityArticle->execute([$articleId]);
         $resultat = $quantityArticle->fetch();
         return $resultat["stock"];
-        //var_dump($quantityArticle);
 
 
 

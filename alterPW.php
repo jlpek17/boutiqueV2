@@ -39,19 +39,19 @@ include("head.php");
 
                     <div class="mb-3">
                         Ancien mot de passe
-                        <input class="form-control" type="text" name="oldPWToReplace" aria-describedby="oldPWHelp" />
+                        <input class="form-control" type="password" name="oldPWToReplace" aria-describedby="oldPWHelp" />
                         <div id="oldPWHelp" class="form-text">celui que vous voulez changer</div>
                     </div>
                     
                     <div class="mb-3">
                         Nouveau mot de passe
-                        <input class="form-control" type="text" name="newPWToAdd" aria-describedby="PWHelp"/>
+                        <input class="form-control" type="password" name="newPWToAdd" aria-describedby="PWHelp"/>
                         <div id="PWHelp" class="form-text">8 caracteres minimum dont 1 caractere spécial et 1 majuscule</div>
                     </div>
                     
                     <div class="mb-3">
                         Confirmer nouveau mot de passe   
-                        <input class="form-control" type="text" name="confirmNewPWToAdd" aria-describedby="confirmPWHelp"/>
+                        <input class="form-control" type="password" name="confirmNewPWToAdd" aria-describedby="confirmPWHelp"/>
                         <div id="confirmPWHelp" class="form-text">retaper le à l'identique</div>        
                     </div>
 
@@ -69,6 +69,9 @@ include("head.php");
     <?php
     /* ***** fetch the <header> part of the page (navbar / ...) ***** */
     include("footer.php");
+
+
+
     ?>
 </body>
 
